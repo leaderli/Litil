@@ -1,9 +1,7 @@
 package io.leaderli.litil.collection;
 
-import io.leaderli.litil.util.LiCastUtil;
 import io.leaderli.litil.util.LiClassUtil;
 
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -249,7 +247,7 @@ public class LiFlux<T> {
      */
     public <K, V> LiFlux<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
         return cast(Map.class)
-                .map(map -> LiCastUtil.cast(map, keyType, valueType));
+                .map(map -> LiClassUtil.filterCanCast(map, keyType, valueType));
     }
 
     /**

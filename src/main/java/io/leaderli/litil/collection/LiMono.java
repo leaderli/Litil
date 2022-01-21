@@ -1,7 +1,6 @@
 package io.leaderli.litil.collection;
 
 import io.leaderli.litil.exception.LiMonoRuntimeException;
-import io.leaderli.litil.util.LiCastUtil;
 import io.leaderli.litil.util.LiClassUtil;
 
 import java.util.Collection;
@@ -192,7 +191,7 @@ public class LiMono<T> {
 
         @SuppressWarnings("rawtypes")
         LiMono<List> listMono = cast(List.class);
-        return LiFlux.of(LiCastUtil.cast(listMono.getOrOther(null), type));
+        return LiFlux.of(LiClassUtil.filterCanCast(listMono.getOrOther(null), type));
     }
 
     /**
@@ -257,7 +256,7 @@ public class LiMono<T> {
 
         @SuppressWarnings("rawtypes")
         LiMono<Map> listMono = cast(Map.class);
-        return LiMono.of(LiCastUtil.cast(listMono.getOrOther(null), keyType, valueType));
+        return LiMono.of(LiClassUtil.filterCanCast(listMono.getOrOther(null), keyType, valueType));
     }
 
 
