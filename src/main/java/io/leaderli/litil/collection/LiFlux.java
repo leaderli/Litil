@@ -16,9 +16,9 @@ import java.util.stream.Stream;
 public class LiFlux<T> {
 
 
-    private final List<LiMono<T>> monos;
+    private final List<LiMoNo<T>> monos;
 
-    private LiFlux(List<LiMono<T>> monos) {
+    private LiFlux(List<LiMoNo<T>> monos) {
         this.monos = monos;
     }
 
@@ -28,9 +28,9 @@ public class LiFlux<T> {
         if (elements == null) {
             return LiFlux.empty();
         }
-        List<LiMono<T>> monos = new ArrayList<>();
+        List<LiMoNo<T>> monos = new ArrayList<>();
         for (T element : elements) {
-            monos.add(LiMono.of(element));
+            monos.add(LiMoNo.of(element));
         }
         return new LiFlux<>(monos);
     }
@@ -44,8 +44,8 @@ public class LiFlux<T> {
         if (elements == null) {
             return LiFlux.empty();
         }
-        List<LiMono<T>> monos = new ArrayList<>();
-        elements.forEachRemaining(element -> monos.add(LiMono.of(element)));
+        List<LiMoNo<T>> monos = new ArrayList<>();
+        elements.forEachRemaining(element -> monos.add(LiMoNo.of(element)));
         return new LiFlux<>(monos);
     }
 
@@ -59,8 +59,8 @@ public class LiFlux<T> {
         if (elements == null) {
             return LiFlux.empty();
         }
-        List<LiMono<T>> monos = new ArrayList<>();
-        elements.forEach(element -> monos.add(LiMono.of(element)));
+        List<LiMoNo<T>> monos = new ArrayList<>();
+        elements.forEach(element -> monos.add(LiMoNo.of(element)));
         return new LiFlux<>(monos);
     }
 
@@ -72,7 +72,7 @@ public class LiFlux<T> {
     public final LiFlux<T> add(T... elements) {
         if (elements != null) {
             for (T element : elements) {
-                this.monos.add(LiMono.of(element));
+                this.monos.add(LiMoNo.of(element));
             }
         }
         return this;
@@ -84,7 +84,7 @@ public class LiFlux<T> {
      */
     public final LiFlux<T> add(Iterable<T> elements) {
         if (elements != null) {
-            elements.forEach(element -> monos.add(LiMono.of(element)));
+            elements.forEach(element -> monos.add(LiMoNo.of(element)));
         }
         return this;
     }
@@ -95,7 +95,7 @@ public class LiFlux<T> {
      */
     public final LiFlux<T> add(Iterator<T> elements) {
         if (elements != null) {
-            elements.forEachRemaining(element -> monos.add(LiMono.of(element)));
+            elements.forEachRemaining(element -> monos.add(LiMoNo.of(element)));
         }
         return this;
     }
@@ -116,7 +116,7 @@ public class LiFlux<T> {
     public <R> LiFlux<R> map(Function<? super T, ? extends R> mapping) {
         if (mapping != null) {
             //noinspection unchecked
-            List<LiMono<R>> new_monos = this.monos.stream().map(mono -> (LiMono<R>) mono.map(mapping)).collect(Collectors.toList());
+            List<LiMoNo<R>> new_monos = this.monos.stream().map(mono -> (LiMoNo<R>) mono.map(mapping)).collect(Collectors.toList());
             return new LiFlux<>(new_monos);
         }
         return LiFlux.empty();
@@ -138,7 +138,7 @@ public class LiFlux<T> {
      * @return get a copy of the collection data, because the collection should not
      * changed by outside
      */
-    public List<LiMono<T>> getMonoCopy() {
+    public List<LiMoNo<T>> getMonoCopy() {
         return new ArrayList<>(monos);
     }
 
@@ -147,29 +147,29 @@ public class LiFlux<T> {
      */
     public List<T> getRawCopy() {
         return trim().monos.stream()
-                .map(LiMono::get)
+                .map(LiMoNo::get)
                 .collect(Collectors.toList());
     }
 
     /**
      * @return return the first element of collection data if collection is present
-     * otherwise return {@link LiMono#empty()}
+     * otherwise return {@link LiMoNo#empty()}
      */
-    public LiMono<T> getFirst() {
+    public LiMoNo<T> getFirst() {
 
         List<T> rawCopy = getRawCopy();
         if (rawCopy.isEmpty()) {
-            return LiMono.empty();
+            return LiMoNo.empty();
         }
-        return LiMono.of(rawCopy.get(0));
+        return LiMoNo.of(rawCopy.get(0));
     }
 
     /**
-     * @param function {@link LiMono#filter(Function)}
+     * @param function {@link LiMoNo#filter(Function)}
      * @return return the first element which is predicate true of collection data
-     * otherwise return {@link LiMono#empty()}
+     * otherwise return {@link LiMoNo#empty()}
      */
-    public LiMono<T> getFirst(Function<? super T, Object> function) {
+    public LiMoNo<T> getFirst(Function<? super T, Object> function) {
         LiFlux<T> filter = filter(function);
         return filter.getFirst();
     }
@@ -180,7 +180,7 @@ public class LiFlux<T> {
      * @return return {@link #getMonoCopy()} if present otherwise return {@link #getMonoCopy()}  of  the new LiFlux with others data
      */
     @SafeVarargs
-    public final List<LiMono<T>> getMonoCopyOrOther(T... others) {
+    public final List<LiMoNo<T>> getMonoCopyOrOther(T... others) {
         return or(others).getMonoCopy();
     }
 
@@ -194,21 +194,21 @@ public class LiFlux<T> {
 
 
     /**
-     * @return return new LiFlux which filter monos {@link LiMono#isPresent()}
+     * @return return new LiFlux which filter monos {@link LiMoNo#isPresent()}
      */
     public LiFlux<T> trim() {
         return filter(null);
     }
 
     /**
-     * @param function {@link LiMono#filter(Function)}
+     * @param function {@link LiMoNo#filter(Function)}
      * @return return new LiFlux which filter monos by function function
      */
     public LiFlux<T> filter(Function<? super T, Object> function) {
 
-        List<LiMono<T>> filtered = this.monos.stream()
+        List<LiMoNo<T>> filtered = this.monos.stream()
                 .map(mono -> mono.filter(function))
-                .filter(LiMono::isPresent)
+                .filter(LiMoNo::isPresent)
                 .collect(Collectors.toList());
         return new LiFlux<>(filtered);
     }
@@ -229,7 +229,7 @@ public class LiFlux<T> {
      * @return return new LiFlux of type R
      */
     public <R> LiFlux<R> cast(Class<R> type) {
-        List<LiMono<R>> castMonos = this.monos.stream()
+        List<LiMoNo<R>> castMonos = this.monos.stream()
                 .map(mono -> mono.cast(type))
                 .collect(Collectors.toList());
         return new LiFlux<>(castMonos);

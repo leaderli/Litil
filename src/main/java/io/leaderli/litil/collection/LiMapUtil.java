@@ -87,11 +87,11 @@ public class LiMapUtil {
     /**
      * 根据key，查询指定class类型的值，当查询不到或类型不匹配时，返回空
      */
-    public static <T> LiMono<T> getTypeObject(Map<String, ?> map, String key, Class<T> itemType) {
-        return LiMono.of(map).map(to-> LiClassUtil.cast(map.get(key), itemType));
+    public static <T> LiMoNo<T> getTypeObject(Map<String, ?> map, String key, Class<T> itemType) {
+        return LiMoNo.of(map).map(to-> LiClassUtil.cast(map.get(key), itemType));
     }
 
-    public static LiMono<String> getTypeObject(Map<String, String> map, String key) {
+    public static LiMoNo<String> getTypeObject(Map<String, String> map, String key) {
         return getTypeObject(map, key, String.class);
     }
 

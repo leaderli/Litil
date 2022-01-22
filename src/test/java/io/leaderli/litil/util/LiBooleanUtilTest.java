@@ -1,6 +1,6 @@
 package io.leaderli.litil.util;
 
-import io.leaderli.litil.meta.LiNo;
+import io.leaderli.litil.meta.Lino;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -17,9 +17,9 @@ public class LiBooleanUtilTest {
 
         Object a;
 
-        a = LiNo.of(null);
+        a = Lino.of(null);
         Assert.assertFalse(LiBooleanUtil.parseBoolean(a));
-        a = LiNo.of(1);
+        a = Lino.of(1);
         Assert.assertTrue(LiBooleanUtil.parseBoolean(a));
 
 

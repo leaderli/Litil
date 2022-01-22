@@ -1,10 +1,13 @@
 package io.leaderli.litil.meta;
 
 
+import io.leaderli.litil.type.LiClassUtil;
+import io.leaderli.litil.util.LiBooleanUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -23,7 +26,6 @@ import java.util.function.Supplier;
  * </ul>
  * <p>
  * Basic Operations
- *
  * <ul>
  *     <li>{@link #get()}</li>
  *     <li>{@link #getOrElse(Object)} ()}</li>
@@ -32,8 +34,14 @@ import java.util.function.Supplier;
  *     <li>{@link #error(Runnable)}</li>
  * </ul>
  * <p>
- * <p>
  * Type conversion:
+ * <ul>
+ *     <li> {@link #orOther(Object)}</li>
+ *     <li> {@link #orOther(Lino)}</li>
+ *     <li> {@link #filter(Function)}</li>
+ *     <li> {@link #cast(Class)} }</li>
+ *     <li> {@link #map(Function)}</li>
+ * </ul>
  *
  * <ul>
  *
@@ -56,22 +64,22 @@ import java.util.function.Supplier;
  * @author leaderli
  * @since 2022/1/21 4:15 PM
  */
-public abstract class LiNo<T> implements LiValue {
+public abstract class Lino<T> implements LiValue {
 
 
     /**
-     * Narrows a widened {@code LiNo<? extends T>} to {@code LiNo<T>}
+     * Narrows a widened {@code Lino<? extends T>} to {@code Lino<T>}
      * by performing a type-safe cast. this is eligible becase immutable/read-only
      * collections are  covariant.
      *
-     * @param value A {@code LiNo}
-     * @param <T>   Component type of {@code LiNo}
-     * @return the given {@code LiNo} instance as narrowed type {@code LiNo<T>}
+     * @param value A {@code Lino}
+     * @param <T>   Component type of {@code Lino}
+     * @return the given {@code Lino} instance as narrowed type {@code Lino<T>}
      */
     @SuppressWarnings("unchecked")
-    public static <T> LiNo<T> narrow(LiNo<? extends T> value) {
+    public static <T> Lino<T> narrow(Lino<? extends T> value) {
 
-        return (LiNo<T>) value;
+        return (Lino<T>) value;
 
     }
 
@@ -81,13 +89,13 @@ public abstract class LiNo<T> implements LiValue {
      * @param <T> component type
      * @return the single instance of {@code None}
      */
-    public static <T> LiNo<T> none() {
+    public static <T> Lino<T> none() {
         @SuppressWarnings("unchecked") final None<T> none = (None<T>) None.INSTANCE;
         return none;
     }
 
 
-    public static <T> LiNo<T> of(T value) {
+    public static <T> Lino<T> of(T value) {
         if (value == null) {
             return none();
         }
@@ -128,14 +136,60 @@ public abstract class LiNo<T> implements LiValue {
      * @param action The action that will be performed if underlying value {@code isPresent()}
      * @return this
      */
-    public abstract LiNo<T> then(Consumer<? super T> action);
+    public abstract Lino<T> then(Consumer<? super T> action);
 
     /**
      * @param action The action that will be performed if underlying value {@code isEmpty()}
      * @return this
      */
-    public abstract LiNo<T> error(Runnable action);
+    public abstract Lino<T> error(Runnable action);
 
+
+    /**
+     * @param other a  value
+     * @return return {@code of(other)} if {@code Node} otherwise return this
+     */
+    public abstract Lino<T> orOther(T other);
+
+    /**
+     * @param other a Lino
+     * @return return other if {@code Node} otherwise return this
+     */
+    public abstract Lino<T> orOther(Lino<T> other);
+
+    /**
+     * @param filter the function return a object value that object type decide the Lino value should remain
+     * @return return this if the value of {@code filter#apply(object)} parse to true by {@code LiBooleanUtil#parseBoolean(object)}
+     * return this if filter is null
+     * otherwise {@code None}
+     * @see LiBooleanUtil#parseBoolean(Object)
+     */
+    public abstract Lino<T> filter(Function<? super T, Object> filter);
+
+    public final Lino<T> filter(boolean remain) {
+        return filter(t -> remain);
+    }
+
+
+    /**
+     * @param castType the type of value can be cast
+     * @param <R>      the type parameter to the value
+     * @return new LiMono with value of casted type
+     */
+    public abstract <R> Lino<R> cast(Class<R> castType);
+
+    /**
+     * @param mapping a function to apply value
+     * @param <R>     the type parameter of mapped value
+     * @return the new Lino with componentType {@code R}
+     */
+    public abstract <R> Lino<R> map(Function<? super T, ? extends R> mapping);
+
+    /**
+     * @see #cast(Class)
+     * @see #map(Function)
+     */
+    public abstract <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping);
 
     /**
      * @param o An object
@@ -145,8 +199,8 @@ public abstract class LiNo<T> implements LiValue {
 
         if (o == this) {
             return true;
-        } else if (o instanceof LiNo) {
-            LiNo<?> compare = (LiNo<?>) o;
+        } else if (o instanceof Lino) {
+            Lino<?> compare = (Lino<?>) o;
             return isEmpty() ? compare.isEmpty() : get().equals(compare.get());
         } else {
             return false;
@@ -155,11 +209,11 @@ public abstract class LiNo<T> implements LiValue {
 
 
     /**
-     * Some represent a defined {@link LiNo} . It contains a value which can not be null
+     * Some represent a defined {@link Lino} . It contains a value which can not be null
      *
      * @param <T> the type of the optional value.
      */
-    static final class Some<T> extends LiNo<T> {
+    static final class Some<T> extends Lino<T> {
 
         private final T value;
 
@@ -179,15 +233,56 @@ public abstract class LiNo<T> implements LiValue {
         }
 
         @Override
-        public LiNo<T> then(Consumer<? super T> action) {
+        public Lino<T> then(Consumer<? super T> action) {
             action.accept(value);
             return this;
         }
 
         @Override
-        public LiNo<T> error(Runnable action) {
+        public Lino<T> error(Runnable action) {
             return this;
         }
+
+        @Override
+        public <R> Lino<R> map(Function<? super T, ? extends R> mapping) {
+            return of(mapping.apply(this.value));
+        }
+
+        @Override
+        public <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping) {
+            return cast(castType).map(mapping);
+        }
+
+
+        @Override
+        public Lino<T> orOther(T other) {
+            return this;
+        }
+
+        @Override
+        public Lino<T> orOther(Lino<T> other) {
+            return this;
+        }
+
+
+        @Override
+        public Lino<T> filter(Function<? super T, Object> filter) {
+            if (filter == null || LiBooleanUtil.parseBoolean(filter.apply(value))) {
+                return this;
+            }
+            return none();
+        }
+
+        @Override
+        public <R> Lino<R> cast(Class<R> castType) {
+            if (LiClassUtil.isAssignableFromOrIsWrapper(castType, this.value.getClass())) {
+                //noinspection unchecked
+                return (Lino<R>) this;
+            }
+            return none();
+
+        }
+
 
         @Override
         public boolean isEmpty() {
@@ -206,11 +301,12 @@ public abstract class LiNo<T> implements LiValue {
     }
 
     /**
-     * * None is a singleton representation of the undefined {@link LiNo}.
+     * * None is a singleton representation of the undefined {@link Lino}.
      *
      * @param <T> The type of the optional value.
      */
-    static final class None<T> extends LiNo<T> {
+    @SuppressWarnings("unchecked")
+    static final class None<T> extends Lino<T> {
         /**
          * The singleton instance of None.
          */
@@ -228,14 +324,45 @@ public abstract class LiNo<T> implements LiValue {
         }
 
         @Override
-        public LiNo<T> then(Consumer<? super T> action) {
+        public Lino<T> then(Consumer<? super T> action) {
             return this;
         }
 
         @Override
-        public LiNo<T> error(Runnable action) {
+        public Lino<T> error(Runnable action) {
             action.run();
             return this;
+        }
+
+        @Override
+        public <R> Lino<R> map(Function<? super T, ? extends R> mapping) {
+            return (Lino<R>) this;
+        }
+
+        @Override
+        public <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping) {
+            return (Lino<R2>) this;
+        }
+
+
+        @Override
+        public Lino<T> orOther(T other) {
+            return of(other);
+        }
+
+        @Override
+        public Lino<T> orOther(Lino<T> other) {
+            return other;
+        }
+
+        @Override
+        public Lino<T> filter(Function<? super T, Object> filter) {
+            return this;
+        }
+
+        @Override
+        public <R> Lino<R> cast(Class<R> castType) {
+            return (Lino<R>) this;
         }
 
         @Override

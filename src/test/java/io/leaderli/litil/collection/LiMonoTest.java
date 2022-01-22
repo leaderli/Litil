@@ -31,7 +31,7 @@ public class LiMonoTest extends Assert {
 
         Data data = new Data();
 
-        LiMono.of(data)
+        LiMoNo.of(data)
                 .map(Data::getBody)
                 .map(Body::getRequest)
                 .map(Request::getName)
@@ -43,7 +43,7 @@ public class LiMonoTest extends Assert {
         body.setRequest(request);
         data.setBody(body);
 
-        LiMono.of(data)
+        LiMoNo.of(data)
                 .map(Data::getBody)
                 .map(Body::getRequest)
                 .map(Request::getName)
@@ -56,10 +56,10 @@ public class LiMonoTest extends Assert {
     public void test3() {
         Data data = new Data();
 
-        LiMono<Body> mono = LiMono.of(data)
+        LiMoNo<Body> mono = LiMoNo.of(data)
                 .map(Data::getBody);
         assertTrue(mono.notPresent());
-        LiMono<String> name = mono
+        LiMoNo<String> name = mono
                 .map(Body::getRequest)
                 .map(Request::getName)
                 .or("123");
@@ -73,7 +73,7 @@ public class LiMonoTest extends Assert {
 
         Object obj = new HashMap<>();
 
-        LiMono.of(obj)
+        LiMoNo.of(obj)
                 .cast(Map.class)
                 .then(map -> assertEquals(0, map.size()))
                 .cast(List.class)
@@ -92,11 +92,11 @@ public class LiMonoTest extends Assert {
         list.add("2");
         list.add(1);
 
-        LiFlux<String> flux = LiMono.of(list).flux(String.class);
+        LiFlux<String> flux = LiMoNo.of(list).flux(String.class);
         assertEquals(2, flux.size());
 
-        LiFlux<Integer> intArr = LiMono.of(list).flux(int.class);
-        LiFlux<Integer> intArr2 = LiMono.of(list).flux(Integer.class);
+        LiFlux<Integer> intArr = LiMoNo.of(list).flux(int.class);
+        LiFlux<Integer> intArr2 = LiMoNo.of(list).flux(Integer.class);
 
         assertEquals(1, intArr.size());
         assertEquals(1, intArr2.size());
@@ -108,7 +108,7 @@ public class LiMonoTest extends Assert {
         map.put(3, 3);
 
 
-        Map<String, String> stringMap = LiMono.of(map).cast(String.class, String.class).get();
+        Map<String, String> stringMap = LiMoNo.of(map).cast(String.class, String.class).get();
 
         assertEquals(1, stringMap.size());
 
@@ -122,7 +122,7 @@ public class LiMonoTest extends Assert {
         list.add("2");
         list.add(1);
 
-        List<LiMono<String>> stream = LiMono.of(list).flux(String.class).getMonoCopy();
+        List<LiMoNo<String>> stream = LiMoNo.of(list).flux(String.class).getMonoCopy();
 
         assertEquals(2, stream.size());
 
@@ -137,9 +137,9 @@ public class LiMonoTest extends Assert {
         list.add("1");
         list.add("2");
         list.add(1);
-        assertEquals(1, LiMono.of(list).flux(Map.class).size());
+        assertEquals(1, LiMoNo.of(list).flux(Map.class).size());
 
-        LiFlux<Map<String, String>> mapStream = LiMono.of(list).flux(Map.class).cast(String.class, String.class);
+        LiFlux<Map<String, String>> mapStream = LiMoNo.of(list).flux(Map.class).cast(String.class, String.class);
         assertEquals(1, mapStream.size());
 
 
@@ -148,21 +148,21 @@ public class LiMonoTest extends Assert {
 
     @Test
     public void filter() {
-        LiMono<String> mono = LiMono.of(null);
+        LiMoNo<String> mono = LiMoNo.of(null);
 
         Assert.assertNull(mono.filter(Objects::nonNull).get());
         Assert.assertNull(mono.filter(str -> str.length() == 4).get());
 
-        mono = LiMono.of("123");
+        mono = LiMoNo.of("123");
         Assert.assertNotNull(mono.filter(Objects::nonNull).get());
         Assert.assertNull(mono.filter(str -> str.length() == 4).get());
 
 //
-        mono = LiMono.of("123");
-        Assert.assertNotNull(mono.filter(LiMono::of).get());
+        mono = LiMoNo.of("123");
+        Assert.assertNotNull(mono.filter(LiMoNo::of).get());
 
         Assert.assertNull(mono.cast(int.class).cast(String.class).get());
-        Assert.assertNull(mono.filter(it -> LiMono.of(it).cast(int.class).cast(String.class)).get());
+        Assert.assertNull(mono.filter(it -> LiMoNo.of(it).cast(int.class).cast(String.class)).get());
 
         Assert.assertNull(mono.filter(it -> null).get());
         Assert.assertNotNull(mono.filter(it -> 1).get());
@@ -193,32 +193,32 @@ public class LiMonoTest extends Assert {
     @Test
     public void getOr() {
 
-        String or = LiMono.<String>of(null).getOrOther("123");
+        String or = LiMoNo.<String>of(null).getOrOther("123");
         Assert.assertEquals("123", or);
     }
 
     @Test
     public void testCast() {
 
-        Assert.assertTrue(LiMono.of("123").cast(CharSequence.class).isPresent());
+        Assert.assertTrue(LiMoNo.of("123").cast(CharSequence.class).isPresent());
     }
 
     @Test
     public void generic() {
 
-        LiMono<Integer> length = LiMono.of("123").map(CharSequence::length);
+        LiMoNo<Integer> length = LiMoNo.of("123").map(CharSequence::length);
         Assert.assertEquals(3, length.get().intValue());
 
 
         ArrayList<Object> list = new ArrayList<>();
-        LiMono<List<Object>> result = LiMono.of(list).map(l -> l);
+        LiMoNo<List<Object>> result = LiMoNo.of(list).map(l -> l);
 
         Assert.assertTrue(result.isPresent());
 
         Map<String, String> map = new HashMap<>();
         map.put("1", "1");
 
-        LiMono<Object> mapMono = LiMono.of(map);
+        LiMoNo<Object> mapMono = LiMoNo.of(map);
 
         mapMono.cast_map(String.class, String.class, (Function<Map<String, String>, CharSequence>) Object::toString);
     }
@@ -263,22 +263,22 @@ public class LiMonoTest extends Assert {
     }
 
     public <T, R> R of(T t, Function<? super T, ? extends R> mapping) {
-        LiMono<? extends R> map = LiMono.of(t).map(mapping);
+        LiMoNo<? extends R> map = LiMoNo.of(t).map(mapping);
         return map.get();
     }
 
     @Test
     public void testCase() {
 
-        LiCase<Object, Integer> liCase = LiMono.<Object>of("1").toCase();
+        LiCase<Object, Integer> liCase = LiMoNo.<Object>of("1").toCase();
 
         liCase.case_map(Integer.class, s -> s);
         liCase.case_map(String.class, String::length);
 
-        LiMono<Integer> of = liCase.mono();
+        LiMoNo<Integer> of = liCase.mono();
         Assert.assertEquals(1, of.get().intValue());
 
-        liCase = LiMono.<Object>of(100).toCase();
+        liCase = LiMoNo.<Object>of(100).toCase();
 
         liCase.case_map(Integer.class, s -> s);
         liCase.case_map(String.class, CharSequence::length);
@@ -291,10 +291,10 @@ public class LiMonoTest extends Assert {
     @Test
     public void testFlux() {
 
-        Assert.assertEquals(3, LiMono.of(Arrays.asList(1, 2, 3)).fluxByArray(List::toArray).size());
-        Assert.assertEquals(3, LiMono.of(Arrays.asList(1, 2, 3)).flux(Integer.class).size());
-        Assert.assertEquals(3, LiMono.of(Arrays.asList(1, 2, 3)).flux(list -> list).size());
-        Assert.assertEquals(3, LiMono.of(Arrays.asList(1, 2, 3)).fluxByIterator(List::iterator).size());
+        Assert.assertEquals(3, LiMoNo.of(Arrays.asList(1, 2, 3)).fluxByArray(List::toArray).size());
+        Assert.assertEquals(3, LiMoNo.of(Arrays.asList(1, 2, 3)).flux(Integer.class).size());
+        Assert.assertEquals(3, LiMoNo.of(Arrays.asList(1, 2, 3)).flux(list -> list).size());
+        Assert.assertEquals(3, LiMoNo.of(Arrays.asList(1, 2, 3)).fluxByIterator(List::iterator).size());
 
     }
 }

@@ -1,5 +1,6 @@
 package io.leaderli.litil.collection;
 
+import io.leaderli.litil.type.LiTypeMap;
 import org.junit.Assert;
 import org.junit.Test;
 

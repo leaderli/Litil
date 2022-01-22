@@ -8,10 +8,16 @@ import org.dom4j.dom.DOMElement;
 import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
 import org.dom4j.io.XMLWriter;
+import org.xml.sax.SAXException;
 
 import java.io.*;
 import java.util.List;
 
+/**
+ * operate xml
+ * <p>
+ * using library dom4j and jaxen
+ */
 @SuppressWarnings("unchecked")
 public class LiDomUtil {
 
@@ -19,12 +25,13 @@ public class LiDomUtil {
     @SuppressWarnings("java:S106")
     private static final PrintStream LOGGER = System.out;
 
-    /**
-     * 在读取文件时，去掉dtd的验证，可以缩短运行时间
-     */
-    public static SAXReader getSAXReader() {
-        @SuppressWarnings("all")
+    private static SAXReader getSAXReader() {
         SAXReader saxReader = new SAXReader(DOMDocumentFactory.getInstance(), false);
+        try {
+            saxReader.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
         return saxReader;
     }
 
@@ -33,8 +40,8 @@ public class LiDomUtil {
 
     }
 
-    public static DOMElement getDOMRootByPath(String path) throws DocumentException {
-        return (DOMElement) getDOMDocumentByPath(path).getRootElement();
+    public static DOMDocument getDOMDocumentByInputStream(InputStream inputStream) throws DocumentException {
+        return (DOMDocument) getSAXReader().read(inputStream);
 
     }
 
@@ -43,13 +50,14 @@ public class LiDomUtil {
 
     }
 
-    public static DOMDocument getDOMDocumentByInputStream(InputStream inputStream) throws DocumentException {
-        return (DOMDocument) getSAXReader().read(inputStream);
+
+    public static DOMElement getDOMRootByPath(String path) throws DocumentException {
+        return (DOMElement) getDOMDocumentByPath(path).getRootElement();
 
     }
 
     public static DOMElement getDOMRootByInputStream(InputStream inputStream) throws DocumentException {
-        return (DOMElement) getSAXReader().read(inputStream).getRootElement();
+        return (DOMElement) getDOMDocumentByInputStream(inputStream).getRootElement();
 
     }
 
@@ -58,23 +66,32 @@ public class LiDomUtil {
 
     }
 
-    public static List<DOMElement> getChildren(Node element) {
+    /**
+     * @param element a {@code DOMElement}
+     * @return all child node of element
+     */
+    public static List<DOMElement> selectNodes(DOMElement element) {
 
         return element.selectNodes("child::*");
     }
 
-    public static List<DOMElement> getChildren(Node element, String xpath) {
+    /**
+     * @param element a {@code DOMElement}
+     * @return the child node query by xpath from element
+     */
+    public static List<DOMElement> selectNodes(DOMElement element, String xpath) {
 
         return element.selectNodes(xpath);
     }
 
-    public static DOMElement selectSingleNode(Node element, String xpath) {
+    /**
+     * @param element a {@code DOMElement}
+     * @return the first child node query by xpath from element
+     */
+    public static DOMElement selectSingleNode(DOMElement element, String xpath) {
         return (DOMElement) element.selectSingleNode(xpath);
     }
 
-    /**
-     * 打印格式化文本
-     */
     public static void prettyPrint(Node node) {
         try {
             //document
@@ -90,6 +107,10 @@ public class LiDomUtil {
 
     }
 
+    /**
+     * @param node the xml node
+     * @return the pretty format content of node
+     */
     public static String pretty(Node node) {
         StringWriter writer = new StringWriter();
         XMLWriter xmlWriter = new XMLWriter(writer, OutputFormat.createPrettyPrint());
@@ -103,21 +124,4 @@ public class LiDomUtil {
         return "";
     }
 
-    /**
-     * 打印格式化文本
-     */
-    public static void createCompactFormat(Node node) {
-        try {
-            //document
-            StringWriter writer = new StringWriter();
-            XMLWriter xmlWriter = new XMLWriter(writer, OutputFormat.createCompactFormat());
-            xmlWriter.write(node);
-            xmlWriter.close();
-            LOGGER.println(writer);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 }

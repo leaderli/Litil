@@ -1,17 +1,17 @@
 package io.leaderli.litil.stream;
 
-import io.leaderli.litil.collection.LiMono;
+import io.leaderli.litil.collection.LiMoNo;
 
 public abstract class LiSink<T, R> implements LiFunction<T, R> {
 
-    public final LiMono<LiSink<T, R>> prevSink;
-    protected LiMono<LiSink<T, R>> nextSink;
+    public final LiMoNo<LiSink<T, R>> prevSink;
+    protected LiMoNo<LiSink<T, R>> nextSink;
 
 
     protected LiSink(LiSink<T, R> prev) {
-        this.prevSink = LiMono.of(prev);
-        this.prevSink.then(sink -> sink.nextSink = LiMono.of(this));
-        this.nextSink = LiMono.empty();
+        this.prevSink = LiMoNo.of(prev);
+        this.prevSink.then(sink -> sink.nextSink = LiMoNo.of(this));
+        this.nextSink = LiMoNo.empty();
     }
 
 

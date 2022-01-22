@@ -35,19 +35,19 @@ public final class LiTuple<T1, T2> {
     /**
      * getter of the 1nd element of this tuple
      *
-     * @return the LiNo value of 1nd element of this tuple
+     * @return the Lino value of 1nd element of this tuple
      */
-    public LiNo<T1> _1() {
-        return LiNo.of(_1);
+    public Lino<T1> _1() {
+        return Lino.of(_1);
     }
 
     /**
      * getter of the 2nd element of this tuple
      *
-     * @return the LiNo value of 2nd element of this tuple
+     * @return the Lino value of 2nd element of this tuple
      */
-    public LiNo<T2> _2() {
-        return LiNo.of(_2);
+    public Lino<T2> _2() {
+        return Lino.of(_2);
     }
 
     /**

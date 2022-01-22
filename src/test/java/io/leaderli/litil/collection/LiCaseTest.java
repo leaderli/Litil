@@ -9,17 +9,17 @@ public class LiCaseTest {
     public void test() {
 
         Object a = "1";
-        LiCase<Object, Integer> liCase = LiCase.of(LiMono.of(a));
+        LiCase<Object, Integer> liCase = LiCase.of(LiMoNo.of(a));
 
         liCase
                 .case_map(Integer.class, s -> s)
                 .case_map(String.class, String::length);
 
-        LiMono<Integer> of = liCase.mono();
+        LiMoNo<Integer> of = liCase.mono();
         Assert.assertEquals(1, of.get().intValue());
 
         a = 100;
-        liCase = LiCase.of(LiMono.of(a));
+        liCase = LiCase.of(LiMoNo.of(a));
 
         liCase
                 .case_map(Integer.class, s -> s)
@@ -29,7 +29,7 @@ public class LiCaseTest {
         of = liCase.mono();
         Assert.assertEquals(100, of.get().intValue());
 
-        liCase = LiCase.of(LiMono.of("abc"));
+        liCase = LiCase.of(LiMoNo.of("abc"));
 
         liCase
                 .case_map(String.class, String::getBytes, bytes -> bytes.length).mono();

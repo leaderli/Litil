@@ -1,37 +1,38 @@
-package io.leaderli.litil.collection;
+package io.leaderli.litil.meta;
 
-import io.leaderli.litil.meta.LiTuple;
+import io.leaderli.litil.collection.LiFlux;
+import io.leaderli.litil.collection.LiMoNo;
 
 import java.util.function.Function;
 
 /**
- * when match mono real type R , apply store function<R,E> to transfer mono<T> to mono<E>.
- * only execute function when call {@link #mono()}
+ * when match lino real type R , apply store function<R,E> to transfer lino<T> to lino<E>.
+ * only execute function when call {@link #lino()}
  *
  * @param <T> the type parameter of mono
  * @param <E> the type parameter of mapping mono
  */
-public class LiCase<T, E> {
+public class LiCase2<T, E> {
 
-    private final LiMoNo<T> mono;
+    private final Lino<T> mono;
 
     private final LiFlux<LiTuple<Class<?>, Function<Object, ? extends E>>> caseWhen = LiFlux.empty();
 
-    private LiCase(LiMoNo<T> mono) {
+    private LiCase2(Lino<T> mono) {
         this.mono = mono;
     }
 
     /**
-     * @param mono the origin  mono
-     * @param <T>  the type parameter of mono
-     * @param <E>  the type parameter of transferred  mono
+     * @param liNo the origin  liNo
+     * @param <T>  the type parameter of liNo
+     * @param <E>  the type parameter of transferred  liNo
      * @return new LiCase
      */
-    public static <T, E> LiCase<T, E> of(LiMoNo<T> mono) {
-        return new LiCase<>(mono);
+    public static <T, E> LiCase2<T, E> of(Lino<T> liNo) {
+        return new LiCase2<>(liNo);
     }
 
-    public <R> LiMoNo<R> filter_map(Function<T, Object> filter, Function<? super T, ? extends R> mapping) {
+    public <R> Lino<R> filter_map(Function<T, Object> filter, Function<? super T, ? extends R> mapping) {
         return mono.filter(filter).map(mapping);
     }
 
@@ -45,7 +46,7 @@ public class LiCase<T, E> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    public <R> LiCase<T, E> case_map(Class<R> keyType, Function<? super R, ? extends E> mapping) {
+    public <R> LiCase2<T, E> case_map(Class<R> keyType, Function<? super R, ? extends E> mapping) {
         this.caseWhen.add(LiTuple.of(keyType, (Function<Object, ? extends E>) mapping));
         return this;
     }
@@ -62,17 +63,17 @@ public class LiCase<T, E> {
      * @return this
      */
     @SuppressWarnings("unchecked")
-    public <R, M> LiCase<T, E> case_map(Class<R> keyType, Function<? super R, ? extends M> mapping1, Function<? super M, ? extends E> mapping2) {
+    public <R, M> LiCase2<T, E> case_map(Class<R> keyType, Function<? super R, ? extends M> mapping1, Function<? super M, ? extends E> mapping2) {
         Function<Object, ? extends E> mapping = (Function<Object, E>) o -> LiMoNo.of(mapping1.apply((R) o)).map(mapping2).get();
         this.caseWhen.add(LiTuple.of(keyType, mapping));
         return this;
     }
 
-
-    /**
-     * @return return first match case_map function
-     */
-    public LiMoNo<E> mono() {
-        return this.caseWhen.map(cw -> (E) mono.cast(cw._1).map(cw._2).get()).getFirst();
-    }
+//
+//    /**
+//     * @return return first match case_map function
+//     */
+//    public Lino<E> lino() {
+//        return this.caseWhen.map(cw -> (E) mono.cast(cw._1).map(cw._2).get()).getFirst();
+//    }
 }

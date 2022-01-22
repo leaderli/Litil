@@ -15,25 +15,25 @@ import java.util.function.Supplier;
  *
  * @param <T> the type parameter of value
  */
-public class LiMono<T> {
+public class LiMoNo<T> {
 
     private final T value;
 
 
-    private LiMono(T value) {
+    private LiMoNo(T value) {
         this.value = value;
     }
 
 
-    public static <T> LiMono<T> of(T t) {
+    public static <T> LiMoNo<T> of(T t) {
 
-        return new LiMono<>(t);
+        return new LiMoNo<>(t);
     }
 
 
-    public static <T> LiMono<T> empty() {
+    public static <T> LiMoNo<T> empty() {
 
-        return new LiMono<>(null);
+        return new LiMoNo<>(null);
     }
 
     /**
@@ -41,18 +41,18 @@ public class LiMono<T> {
      * @param <R>     the type parameter of mapped value
      * @return the new LiMono with type <R>
      */
-    public <R> LiMono<R> map(Function<? super T, ? extends R> mapping) {
+    public <R> LiMoNo<R> map(Function<? super T, ? extends R> mapping) {
         if (value != null && mapping != null) {
-            return LiMono.of(mapping.apply(this.value));
+            return LiMoNo.of(mapping.apply(this.value));
         }
-        return LiMono.empty();
+        return LiMoNo.empty();
     }
 
     /**
      * @param consumer apply  value when  value {@link #isPresent()}
      * @return this
      */
-    public LiMono<T> then(Consumer<T> consumer) {
+    public LiMoNo<T> then(Consumer<T> consumer) {
         if (value != null) {
             consumer.accept(value);
         }
@@ -63,7 +63,7 @@ public class LiMono<T> {
      * @param runnable run when value {@link #notPresent()}
      * @return this
      */
-    public LiMono<T> error(Runnable runnable) {
+    public LiMoNo<T> error(Runnable runnable) {
         if (value == null) {
             runnable.run();
         }
@@ -74,9 +74,9 @@ public class LiMono<T> {
      * @param supplier a {@link Supplier} whose result is returned if no value is present
      * @return this if value present otherwise the new LiMono with result of {@link Supplier#get()}
      */
-    public LiMono<T> error(Supplier<T> supplier) {
+    public LiMoNo<T> error(Supplier<T> supplier) {
         if (value == null) {
-            return LiMono.of(supplier.get());
+            return LiMoNo.of(supplier.get());
         }
         return this;
     }
@@ -85,7 +85,7 @@ public class LiMono<T> {
      * @return this
      * @throws RuntimeException - when value is null
      */
-    public LiMono<T> exception() {
+    public LiMoNo<T> exception() {
         if (value == null) {
             throw new LiMonoRuntimeException("value is null ");
         }
@@ -118,18 +118,18 @@ public class LiMono<T> {
      * @param other the value is returned if no value is present
      * @return this if value is present otherwise a new LiMono with value of other
      */
-    public LiMono<T> or(T other) {
+    public LiMoNo<T> or(T other) {
         if (isPresent()) {
             return this;
         }
-        return LiMono.of(other);
+        return LiMoNo.of(other);
     }
 
     /**
      * @param other the value is returned if no value is present
      * @return this if value is present otherwise return other
      */
-    public LiMono<T> or(LiMono<T> other) {
+    public LiMoNo<T> or(LiMoNo<T> other) {
         if (isPresent()) {
             return this;
         }
@@ -139,26 +139,26 @@ public class LiMono<T> {
     /**
      * @param function the function return a object value that object type decide the mono value should remain
      * @return if function is null, return this;
-     * return this when function return LiMono and  {@link LiMono#isPresent()} is true
+     * return this when function return LiMono and  {@link LiMoNo#isPresent()} is true
      * return this when function return LiFLux and  {@link LiFlux#notEmpty()} ()} is true
      * return this when function return Collection and object is not empty
      * return this when function return Map and object is not empty
      * return this when function return other object and   object is not null
      * otherwise return {@link #empty()}
      */
-    public LiMono<T> filter(Function<? super T, Object> function) {
+    public LiMoNo<T> filter(Function<? super T, Object> function) {
 
         if (function == null) {
             return this;
         }
         if (notPresent()) {
-            return LiMono.empty();
+            return LiMoNo.empty();
         }
         Object apply = function.apply(this.value);
         if (apply instanceof Boolean) {
             return filter((Boolean) apply);
-        } else if (apply instanceof LiMono) {
-            return filter(((LiMono<?>) apply).isPresent());
+        } else if (apply instanceof LiMoNo) {
+            return filter(((LiMoNo<?>) apply).isPresent());
         } else if (apply instanceof LiFlux) {
             return filter(((LiFlux<?>) apply).notEmpty());
         } else if (apply instanceof Iterable) {
@@ -175,8 +175,8 @@ public class LiMono<T> {
      * @param filter if the value should remain
      * @return return this if filter is true otherwise  {@link #empty()}
      */
-    public LiMono<T> filter(boolean filter) {
-        return filter ? this : LiMono.empty();
+    public LiMoNo<T> filter(boolean filter) {
+        return filter ? this : LiMoNo.empty();
     }
 
 
@@ -189,7 +189,7 @@ public class LiMono<T> {
     public <R> LiFlux<R> flux(Class<R> type) {
 
         @SuppressWarnings("rawtypes")
-        LiMono<List> listMono = cast(List.class);
+        LiMoNo<List> listMono = cast(List.class);
         return LiFlux.of(LiClassUtil.filterCanCast(listMono.getOrOther(null), type));
     }
 
@@ -235,12 +235,12 @@ public class LiMono<T> {
      * @param <R>  the type parameter to the value
      * @return new LiMono with value of casted type
      */
-    public <R> LiMono<R> cast(Class<R> type) {
+    public <R> LiMoNo<R> cast(Class<R> type) {
         if (this.isPresent() && LiClassUtil.isAssignableFromOrIsWrapper(type, this.value.getClass())) {
             //noinspection unchecked
-            return (LiMono<R>) this;
+            return (LiMoNo<R>) this;
         }
-        return LiMono.empty();
+        return LiMoNo.empty();
     }
 
     /**
@@ -251,11 +251,11 @@ public class LiMono<T> {
      * @return return {@link #empty()} if value is not {@link Map}
      * otherwise return new LiMono with Map<K,V>
      */
-    public <K, V> LiMono<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
+    public <K, V> LiMoNo<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
 
         @SuppressWarnings("rawtypes")
-        LiMono<Map> listMono = cast(Map.class);
-        return LiMono.of(LiClassUtil.filterCanCast(listMono.getOrOther(null), keyType, valueType));
+        LiMoNo<Map> listMono = cast(Map.class);
+        return LiMoNo.of(LiClassUtil.filterCanCast(listMono.getOrOther(null), keyType, valueType));
     }
 
 
@@ -263,7 +263,7 @@ public class LiMono<T> {
      * @see #cast(Class, Class)
      * @see #map(Function)
      */
-    public <K, V, R> LiMono<R> cast_map(Class<K> keyType, Class<V> valueType, Function<Map<K, V>, ? extends R> mapping) {
+    public <K, V, R> LiMoNo<R> cast_map(Class<K> keyType, Class<V> valueType, Function<Map<K, V>, ? extends R> mapping) {
         return cast(keyType, valueType).map(mapping);
     }
 
@@ -271,7 +271,7 @@ public class LiMono<T> {
      * @see #cast(Class)
      * @see #map(Function)
      */
-    public <R, E> LiMono<E> cast_map(Class<R> type, Function<? super R, ? extends E> mapping) {
+    public <R, E> LiMoNo<E> cast_map(Class<R> type, Function<? super R, ? extends E> mapping) {
         return cast(type).map(mapping);
     }
 

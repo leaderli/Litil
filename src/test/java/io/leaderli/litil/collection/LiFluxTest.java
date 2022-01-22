@@ -33,17 +33,17 @@ public class LiFluxTest {
         LiFlux<Integer> flux = LiFlux.of(1, 2, 3);
         assertEquals(3, flux.size());
 
-        List<LiMono<Integer>> liMonos = flux.getMonoCopy();
-        liMonos.add(LiMono.of(4));
+        List<LiMoNo<Integer>> liNos = flux.getMonoCopy();
+        liNos.add(LiMoNo.of(4));
 
-        assertEquals(4, liMonos.size());
+        assertEquals(4, liNos.size());
         assertEquals(3, flux.size());
 
     }
 
     @Test
     public void getOr() {
-        List<LiMono<Integer>> flux = LiFlux.<Integer>empty().getMonoCopyOrOther(1, 2, 3);
+        List<LiMoNo<Integer>> flux = LiFlux.<Integer>empty().getMonoCopyOrOther(1, 2, 3);
         assertEquals(3, flux.size());
         flux = LiFlux.of(1).getMonoCopyOrOther(1, 2, 3);
         assertEquals(1, flux.size());
@@ -93,11 +93,11 @@ public class LiFluxTest {
         list.add("2");
         list.add(1);
 
-        LiFlux<Map<String, String>> mono = LiMono.of(list).flux(Map.class).cast(String.class, String.class);
+        LiFlux<Map<String, String>> mono = LiMoNo.of(list).flux(Map.class).cast(String.class, String.class);
 
         assertEquals(1, mono.size());
 
-        LiFlux<Integer> integerLiFlux = LiMono.of(list).flux(Map.class).cast_map(String.class, Object.class, Map::size);
+        LiFlux<Integer> integerLiFlux = LiMoNo.of(list).flux(Map.class).cast_map(String.class, Object.class, Map::size);
         assertEquals(2, integerLiFlux.getFirst().get().intValue());
 
     }
@@ -128,6 +128,8 @@ public class LiFluxTest {
 
         flux = flux.filter(it -> it > 1);
         assertEquals(1, flux.size());
+
+        Assert.assertTrue(flux.or(1, 2, 3).filter(it -> it > 1).getFirst().get() == 2);
 
     }
 

@@ -1,7 +1,7 @@
 package io.leaderli.litil.event;
 
 
-import io.leaderli.litil.meta.LiNo;
+import io.leaderli.litil.meta.Lino;
 
 /**
  * All Events are constructed with a reference to the object, the "source",
@@ -19,8 +19,8 @@ public class LiEventObject<T> {
         this.source = source;
     }
 
-    public final LiNo<T> getSource() {
-        return LiNo.of(source);
+    public final Lino<T> getSource() {
+        return Lino.of(source);
     }
 
 

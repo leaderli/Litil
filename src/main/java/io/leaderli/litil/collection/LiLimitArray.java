@@ -1,7 +1,10 @@
 package io.leaderli.litil.collection;
 
-import java.util.Arrays;
-
+/**
+ * a container is a array that have invariable length, which not contain null or duplicate element
+ *
+ * @param <T> the type of elements
+ */
 public class LiLimitArray<T> {
 
     public final int size;
@@ -13,6 +16,12 @@ public class LiLimitArray<T> {
     }
 
 
+    /**
+     * move all element to the next index, the tail element will removed
+     * and the new element append to head
+     *
+     * @param t the new element
+     */
     public void add(T t) {
         if (t == null || contains(t)) {
             return;
@@ -21,6 +30,12 @@ public class LiLimitArray<T> {
         data[0] = t;
     }
 
+    /**
+     * removed the find element and  move all element after the find element to the prev index
+     *
+     * @param t the element will be removed
+     * @return true if container have element ,it will removed otherwise false
+     */
     public boolean remove(T t) {
         if (t == null) {
             return false;
@@ -43,6 +58,12 @@ public class LiLimitArray<T> {
         data[size - 1] = null;
     }
 
+    /**
+     * @param t a element
+     * @return true if container have element otherwise false
+     * <p>
+     * if element is null ,it's always return false
+     */
     public boolean contains(T t) {
         if (t == null) {
             return false;
@@ -56,8 +77,4 @@ public class LiLimitArray<T> {
     }
 
 
-    @Override
-    public String toString() {
-        return Arrays.toString(data);
-    }
 }

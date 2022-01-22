@@ -1,6 +1,5 @@
 package io.leaderli.litil.dom;
 
-import io.leaderli.litil.dom.LiDomUtil;
 import org.dom4j.DocumentException;
 import org.dom4j.dom.DOMElement;
 import org.junit.Assert;
@@ -30,7 +29,7 @@ public class LiDomUtilTest extends Assert {
         void accept(Visitor visitor) {
 
             visitor.visit(dom);
-            LiDomUtil.getChildren(dom).forEach(child-> new MyDom(child).accept(visitor));
+            LiDomUtil.selectNodes(dom).forEach(child -> new MyDom(child).accept(visitor));
             visitor.visit(dom.getTextTrim());
         }
     }
@@ -39,7 +38,7 @@ public class LiDomUtilTest extends Assert {
     public void test() throws DocumentException {
         DOMElement dom = LiDomUtil.getDOMRootByPath("/test1.xml");
 
-        assertEquals(dom.asXML(),"<test>\n" +
+        assertEquals(dom.asXML(), "<test>\n" +
                 "    <t1>1</t1>\n" +
                 "    <t2>1</t2>\n" +
                 "    <t3>\n" +
@@ -49,7 +48,7 @@ public class LiDomUtilTest extends Assert {
 
 
         MyDom myDom = new MyDom(dom);
-        myDom.accept(new Visitor(){
+        myDom.accept(new Visitor() {
             @Override
             void visit(DOMElement dom) {
             }
@@ -65,9 +64,11 @@ public class LiDomUtilTest extends Assert {
     public void selectSingleNode() throws DocumentException {
         DOMElement dom = LiDomUtil.getDOMRootByPath("/test1.xml");
 
-        Assert.assertEquals("<t1>1</t1>",
-                LiDomUtil.selectSingleNode(dom, "t1").asXML());
-
+        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectSingleNode(dom, "t1").asXML());
+        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom, "t1").get(0).asXML());
+        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom).get(0).asXML());
+   
+        Assert.assertEquals(0, LiDomUtil.selectNodes(dom, "t12").size());
     }
 
     @Test
@@ -80,6 +81,6 @@ public class LiDomUtilTest extends Assert {
                 "  <t3> \n" +
                 "    <tt3>tt3</tt3> \n" +
                 "  </t3> \n" +
-                "</test>",LiDomUtil.pretty(dom));
+                "</test>", LiDomUtil.pretty(dom));
     }
 }
