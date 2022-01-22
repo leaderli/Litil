@@ -1,8 +1,11 @@
-package io.leaderli.litil.util;
+package io.leaderli.litil.collection;
 
-import io.leaderli.litil.collection.LiMono;
+import io.leaderli.litil.type.LiClassUtil;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class LiMapUtil {
 

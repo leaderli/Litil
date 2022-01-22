@@ -1,6 +1,6 @@
 package io.leaderli.litil.collection;
 
-import io.leaderli.litil.util.LiClassUtil;
+import io.leaderli.litil.type.LiClassUtil;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,6 +1,4 @@
-package io.leaderli.litil.util;
-
-import io.leaderli.litil.exception.LiAssertException;
+package io.leaderli.litil.exception;
 
 public class LiAssertUtil {
 

@@ -1,7 +1,7 @@
 package io.leaderli.litil.meta;
 
 import io.leaderli.litil.collection.LiTypeMap;
-import io.leaderli.litil.util.LiClassUtil;
+import io.leaderli.litil.type.LiClassUtil;
 
 public class LiPrimitive {
 

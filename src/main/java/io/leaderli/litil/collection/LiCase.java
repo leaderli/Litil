@@ -1,6 +1,6 @@
 package io.leaderli.litil.collection;
 
-import io.leaderli.litil.meta.LiTuple2;
+import io.leaderli.litil.meta.LiTuple;
 
 import java.util.function.Function;
 
@@ -15,7 +15,7 @@ public class LiCase<T, E> {
 
     private final LiMono<T> mono;
 
-    private final LiFlux<LiTuple2<Class<?>, Function<Object, ? extends E>>> caseWhen = LiFlux.empty();
+    private final LiFlux<LiTuple<Class<?>, Function<Object, ? extends E>>> caseWhen = LiFlux.empty();
 
     private LiCase(LiMono<T> mono) {
         this.mono = mono;
@@ -46,7 +46,7 @@ public class LiCase<T, E> {
      */
     @SuppressWarnings("unchecked")
     public <R> LiCase<T, E> case_map(Class<R> keyType, Function<? super R, ? extends E> mapping) {
-        this.caseWhen.add(LiTuple2.of(keyType, (Function<Object, ? extends E>) mapping));
+        this.caseWhen.add(LiTuple.of(keyType, (Function<Object, ? extends E>) mapping));
         return this;
     }
 
@@ -64,7 +64,7 @@ public class LiCase<T, E> {
     @SuppressWarnings("unchecked")
     public <R, M> LiCase<T, E> case_map(Class<R> keyType, Function<? super R, ? extends M> mapping1, Function<? super M, ? extends E> mapping2) {
         Function<Object, ? extends E> mapping = (Function<Object, E>) o -> LiMono.of(mapping1.apply((R) o)).map(mapping2).get();
-        this.caseWhen.add(LiTuple2.of(keyType, mapping));
+        this.caseWhen.add(LiTuple.of(keyType, mapping));
         return this;
     }
 

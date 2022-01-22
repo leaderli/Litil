@@ -56,7 +56,7 @@ import java.util.function.Supplier;
  * @author leaderli
  * @since 2022/1/21 4:15 PM
  */
-public abstract class LiNo<T> {
+public abstract class LiNo<T> implements LiValue {
 
 
     /**
@@ -136,21 +136,6 @@ public abstract class LiNo<T> {
      */
     public abstract LiNo<T> error(Runnable action);
 
-    /**
-     * Checks , this {@code LiNo} is empty, i.e. if the underlying value is absent.
-     *
-     * @return false if no underlying value is present , true otherwise.
-     */
-    public abstract boolean isEmpty();
-
-    /**
-     * Checks , this {@code LiNo} is present , i.e. if the underlying value is present.
-     *
-     * @return true if no underlying value is present , false otherwise.
-     */
-    public final boolean isPresent() {
-        return !isEmpty();
-    }
 
     /**
      * @param o An object
@@ -167,16 +152,6 @@ public abstract class LiNo<T> {
             return false;
         }
     }
-
-    /**
-     * return the name of this Value type
-     *
-     * @return this type name
-     */
-    public abstract String stringPrefix();
-
-    @Override
-    public abstract String toString();
 
 
     /**

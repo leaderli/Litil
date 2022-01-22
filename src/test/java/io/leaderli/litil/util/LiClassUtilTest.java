@@ -1,5 +1,6 @@
 package io.leaderli.litil.util;
 
+import io.leaderli.litil.type.LiClassUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

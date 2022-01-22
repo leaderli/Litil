@@ -1,4 +1,4 @@
-package io.leaderli.litil.util;
+package io.leaderli.litil.type;
 
 import java.io.IOException;
 import java.lang.reflect.Array;

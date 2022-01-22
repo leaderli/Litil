@@ -1,9 +1,14 @@
-package io.leaderli.litil.util;
+package io.leaderli.litil.collection;
 
 import java.util.*;
 
 public class LiListUtil {
 
+    /**
+     * @param list a list
+     * @param <T>  the componentType of list
+     * @return the elements  which is duplicate at list
+     */
     public static <T> List<T> getDuplicateElement(List<T> list) {
 
         if (list == null || list.isEmpty()) {

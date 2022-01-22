@@ -1,9 +1,8 @@
 package io.leaderli.litil.collection;
 
 import io.leaderli.litil.exception.LiMonoRuntimeException;
-import io.leaderli.litil.util.LiClassUtil;
+import io.leaderli.litil.type.LiClassUtil;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -163,7 +162,7 @@ public class LiMono<T> {
         } else if (apply instanceof LiFlux) {
             return filter(((LiFlux<?>) apply).notEmpty());
         } else if (apply instanceof Iterable) {
-            return filter(!((Collection<?>) apply).isEmpty());
+            return filter(((Iterable<?>) apply).iterator().hasNext());
         } else if (apply instanceof Map) {
             return filter(!((Map<?, ?>) apply).isEmpty());
         } else {
