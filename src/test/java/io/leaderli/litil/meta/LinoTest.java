@@ -153,6 +153,20 @@ public class LinoTest {
 
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
+    public void tomap() {
+
+        Map map = new HashMap<>();
+        map.put("1", "1");
+        map.put("2", 1);
+        map.put(3, "1");
+
+        Assert.assertEquals(1, Lino.of(map).toMap(String.class, String.class).get().size());
+        Assert.assertEquals(0, Lino.of(map).toMap(Boolean.class, String.class).get().size());
+        Assert.assertEquals(Lino.none(), Lino.of(null).toMap(Boolean.class, String.class));
+    }
+
     @Test
     public void testToString() {
         Assert.assertSame("None", Lino.of(null).toString());

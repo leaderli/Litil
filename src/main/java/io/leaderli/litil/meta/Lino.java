@@ -6,6 +6,7 @@ import io.leaderli.litil.util.LiBooleanUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -223,6 +224,17 @@ public abstract class Lino<T> implements LiValue {
     public abstract <E> LiCase<T, E> toLiCase();
 
     /**
+     * the underlying  value is map
+     *
+     * @param keyType   type of map key
+     * @param valueType type of  map value
+     * @param <K>       type parameter of map key
+     * @param <V>       type parameter of map value
+     * @return lino of correct type declare
+     */
+    public abstract <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType);
+
+    /**
      * Some represent a defined {@link Lino} . It contains a value which can not be null
      *
      * @param <T> the type of the optional value.
@@ -295,6 +307,11 @@ public abstract class Lino<T> implements LiValue {
         @Override
         public <E> LiCase<T, E> toLiCase() {
             return LiCase.of(this);
+        }
+
+        @Override
+        public <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType) {
+            return Lino.of(LiClassUtil.filterCanCast(cast(Map.class).get(), keyType, valueType));
         }
 
 
@@ -434,6 +451,11 @@ public abstract class Lino<T> implements LiValue {
         @Override
         public <E> LiCase<T, E> toLiCase() {
             return LiCase.none();
+        }
+
+        @Override
+        public <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType) {
+            return Lino.none();
         }
 
 
