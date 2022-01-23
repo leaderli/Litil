@@ -3,10 +3,7 @@ package io.leaderli.litil.meta;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class LinoTest {
 
@@ -135,6 +132,28 @@ public class LinoTest {
     }
 
     @Test
+    public void lira() {
+
+        Assert.assertSame(Lino.of(null).liraByArray(n -> new Object[]{n}), Lira.none());
+
+        Assert.assertEquals(Lira.of(1), Lino.of(1).liraByArray(n -> new Integer[]{n}));
+
+
+        Lino<List<Integer>> of = Lino.of(Arrays.asList(1, 2));
+        Lira<Integer> lira = of.lira(integers -> integers);
+        Assert.assertEquals(2, lira.size());
+        lira = of.liraByIterator(List::iterator);
+        Assert.assertEquals(2, lira.size());
+    }
+
+    @Test
+    public void licase() {
+
+        Assert.assertSame(LiCase.none(), Lino.none().toLiCase());
+
+    }
+
+    @Test
     public void testToString() {
         Assert.assertSame("None", Lino.of(null).toString());
         Assert.assertEquals("Some(1)", Lino.of(1).toString());
@@ -142,14 +161,16 @@ public class LinoTest {
 
     @Test
     public void eq() {
-        Assert.assertFalse(Lino.none().eq(null));
-        Assert.assertFalse(Lino.none().eq(1));
-        Assert.assertFalse(Lino.none().eq(Lino.of(1)));
+        Assert.assertNotEquals(Lino.none(), null);
+        Assert.assertNotEquals(Lino.none(), Lino.of(1));
 
-        Assert.assertTrue(Lino.none().eq(Lino.of(null)));
-        Assert.assertTrue(Lino.of(null).eq(Lino.of(null)));
+        Assert.assertEquals(Lino.none(), Lino.of(null));
+        Assert.assertEquals(Lino.of(null), Lino.of(null));
 
-        Assert.assertTrue(Lino.of(1).eq(Lino.of(1)));
+        Assert.assertEquals(Lino.of(1), Lino.of(1));
+
+        Assert.assertEquals(Lino.of(1), Lino.of(1));
+        Assert.assertEquals(Lino.of(null), Lino.of(null));
     }
 
     @Test

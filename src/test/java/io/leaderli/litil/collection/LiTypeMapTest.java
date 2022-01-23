@@ -34,7 +34,7 @@ public class LiTypeMapTest {
     public void getMono() {
         LiTypeMap liTypeMap = new LiTypeMap();
 
-        Assert.assertTrue(liTypeMap.get(String.class).notPresent());
+        Assert.assertTrue(liTypeMap.get(String.class).isEmpty());
         liTypeMap.put(String.class, "");
         Assert.assertTrue(liTypeMap.get(String.class).isPresent());
     }
@@ -43,7 +43,7 @@ public class LiTypeMapTest {
     public void remove() {
         LiTypeMap liTypeMap = new LiTypeMap();
 
-        Assert.assertTrue(liTypeMap.get(String.class).notPresent());
+        Assert.assertTrue(liTypeMap.get(String.class).isEmpty());
         String v1 = "";
         liTypeMap.put(String.class, v1);
         liTypeMap.put(CharSequence.class, "");

@@ -5,6 +5,7 @@ import io.leaderli.litil.type.LiClassUtil;
 import io.leaderli.litil.util.LiBooleanUtil;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -54,11 +55,6 @@ import java.util.function.Supplier;
  *     <li> {@link #isPresent()}</li>
  * </ul>
  * <p>
- * Equality checks:
- *
- * <ul>
- *     <li>{@link #eq(Object)} </li>
- * </ul>
  *
  * @param <T> The type of the wrapped value.
  * @author leaderli
@@ -69,7 +65,7 @@ public abstract class Lino<T> implements LiValue {
 
     /**
      * Narrows a widened {@code Lino<? extends T>} to {@code Lino<T>}
-     * by performing a type-safe cast. this is eligible becase immutable/read-only
+     * by performing a type-safe cast. this is eligible because immutable/read-only
      * collections are  covariant.
      *
      * @param value A {@code Lino}
@@ -147,13 +143,19 @@ public abstract class Lino<T> implements LiValue {
 
     /**
      * @param other a  value
-     * @return return {@code of(other)} if {@code Node} otherwise return this
+     * @return return {@code of(other)} if {@code isEmpty} otherwise return this
      */
     public abstract Lino<T> orOther(T other);
 
     /**
+     * @param other a supplier return a value
+     * @return return {@code of(other.get())} if {@code isEmpty} otherwise return this
+     */
+    public abstract Lino<T> orOther(Supplier<T> other);
+
+    /**
      * @param other a Lino
-     * @return return other if {@code Node} otherwise return this
+     * @return return {@code other} if {@code isEmpty} otherwise return this
      */
     public abstract Lino<T> orOther(Lino<T> other);
 
@@ -191,22 +193,34 @@ public abstract class Lino<T> implements LiValue {
      */
     public abstract <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping);
 
+
     /**
-     * @param o An object
-     * @return the underlying value is equals
+     * @param mapping the function convert lino to Iterable
+     * @param <R>     the type parameter of lira componentType
+     * @return a lira produced by lino
      */
-    public boolean eq(Object o) {
+    public abstract <R> Lira<R> lira(Function<T, Iterable<R>> mapping);
 
-        if (o == this) {
-            return true;
-        } else if (o instanceof Lino) {
-            Lino<?> compare = (Lino<?>) o;
-            return isEmpty() ? compare.isEmpty() : get().equals(compare.get());
-        } else {
-            return false;
-        }
-    }
+    /**
+     * @param mapping the function convert lino to  array
+     * @param <R>     the type parameter of lira componentType
+     * @return a lira produced by lino
+     */
+    public abstract <R> Lira<R> liraByArray(Function<T, R[]> mapping);
 
+
+    /**
+     * @param mapping the function convert lino to Iterator
+     * @param <R>     the type parameter of lira componentType
+     * @return a lira produced by lino
+     */
+    public abstract <R> Lira<R> liraByIterator(Function<T, Iterator<R>> mapping);
+
+    /**
+     * @param <E> the type parameter of LiCase 2nd componentType
+     * @return a new LiCase<T,E>
+     */
+    public abstract <E> LiCase<T, E> toLiCase();
 
     /**
      * Some represent a defined {@link Lino} . It contains a value which can not be null
@@ -253,9 +267,44 @@ public abstract class Lino<T> implements LiValue {
             return cast(castType).map(mapping);
         }
 
+        @Override
+        public <R> Lira<R> lira(Function<T, Iterable<R>> mapping) {
+            if (mapping == null) {
+                return Lira.none();
+            }
+            return Lira.of(mapping.apply(this.value));
+        }
+
+        @Override
+        public <R> Lira<R> liraByArray(Function<T, R[]> mapping) {
+            if (mapping == null) {
+                return Lira.none();
+            }
+            return Lira.of(mapping.apply(this.value));
+        }
+
+        @Override
+        public <R> Lira<R> liraByIterator(Function<T, Iterator<R>> mapping) {
+            if (mapping == null) {
+                return Lira.none();
+            }
+            return Lira.of(mapping.apply(this.value));
+        }
+
+
+        @Override
+        public <E> LiCase<T, E> toLiCase() {
+            return LiCase.of(this);
+        }
+
 
         @Override
         public Lino<T> orOther(T other) {
+            return this;
+        }
+
+        @Override
+        public Lino<T> orOther(Supplier<T> other) {
             return this;
         }
 
@@ -297,6 +346,28 @@ public abstract class Lino<T> implements LiValue {
         @Override
         public String toString() {
             return stringPrefix() + "(" + value + ")";
+        }
+
+
+        /**
+         * @param o An object
+         * @return the underlying value is equals
+         */
+        public boolean equals(Object o) {
+
+            if (o == this) {
+                return true;
+            } else if (o instanceof Lino) {
+                Lino<?> compare = (Lino<?>) o;
+                return get().equals(compare.get());
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(value);
         }
     }
 
@@ -344,10 +415,36 @@ public abstract class Lino<T> implements LiValue {
             return (Lino<R2>) this;
         }
 
+        @Override
+        public <R> Lira<R> lira(Function<T, Iterable<R>> mapping) {
+            return Lira.none();
+        }
+
+        @Override
+        public <R> Lira<R> liraByArray(Function<T, R[]> mapping) {
+            return Lira.none();
+        }
+
+        @Override
+        public <R> Lira<R> liraByIterator(Function<T, Iterator<R>> mapping) {
+            return Lira.none();
+        }
+
+
+        @Override
+        public <E> LiCase<T, E> toLiCase() {
+            return LiCase.none();
+        }
+
 
         @Override
         public Lino<T> orOther(T other) {
             return of(other);
+        }
+
+        @Override
+        public Lino<T> orOther(Supplier<T> other) {
+            return of(other.get());
         }
 
         @Override

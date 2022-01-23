@@ -1,5 +1,6 @@
 package io.leaderli.litil.collection;
 
+import io.leaderli.litil.meta.Lino;
 import io.leaderli.litil.type.LiClassUtil;
 
 import java.util.Collections;
@@ -87,11 +88,11 @@ public class LiMapUtil {
     /**
      * 根据key，查询指定class类型的值，当查询不到或类型不匹配时，返回空
      */
-    public static <T> LiMoNo<T> getTypeObject(Map<String, ?> map, String key, Class<T> itemType) {
-        return LiMoNo.of(map).map(to-> LiClassUtil.cast(map.get(key), itemType));
+    public static <T> Lino<T> getTypeObject(Map<String, ?> map, String key, Class<T> itemType) {
+        return Lino.of(map).map(to -> LiClassUtil.cast(map.get(key), itemType));
     }
 
-    public static LiMoNo<String> getTypeObject(Map<String, String> map, String key) {
+    public static Lino<String> getTypeObject(Map<String, String> map, String key) {
         return getTypeObject(map, key, String.class);
     }
 

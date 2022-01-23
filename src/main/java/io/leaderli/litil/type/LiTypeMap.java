@@ -1,6 +1,6 @@
 package io.leaderli.litil.type;
 
-import io.leaderli.litil.collection.LiMoNo;
+import io.leaderli.litil.meta.Lino;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,20 +31,20 @@ public class LiTypeMap {
      * @param <T>      the type parameter of key and value
      * @return map value or  supplier.get()
      */
-    public <T> LiMoNo<T> computeIfAbsent(Class<T> type, Supplier<T> supplier) {
-        return get(type).error(() -> put(type, supplier.get()));
+    public <T> Lino<T> computeIfAbsent(Class<T> type, Supplier<T> supplier) {
+        return get(type).orOther(() -> put(type, supplier.get()));
     }
 
 
     /**
      * @param type the map key
      * @param <T>  the type parameter of key and value
-     * @return return {@link LiMoNo#empty()} if map don not contains the value of type
-     * otherwise return new LiMono with  the value of type
+     * @return return {@link Lino#isEmpty()} if map don not contains the value of type
+     * otherwise return new lino with  the value of type
      */
     @SuppressWarnings("unchecked")
-    public <T> LiMoNo<T> get(Class<T> type) {
-        return LiMoNo.of((T) proxy.get(LiClassUtil.primitiveToWrapper(type)));
+    public <T> Lino<T> get(Class<T> type) {
+        return Lino.of((T) proxy.get(LiClassUtil.primitiveToWrapper(type)));
     }
 
 

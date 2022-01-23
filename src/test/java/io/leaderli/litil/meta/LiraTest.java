@@ -5,6 +5,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author leaderli
@@ -33,11 +36,43 @@ public class LiraTest {
     }
 
     @Test
+    public void map() {
+
+        Lira.<String>none().map(String::length);
+        Assert.assertSame(2, Lira.of(1, 2, 3).map(i -> i + 1).first().get());
+    }
+
+    @Test
+    public void cast_map() {
+        List<Object> objs = Arrays.asList(1, "2", 3);
+        Lira<Object> of = Lira.of(objs);
+
+
+        Assert.assertEquals("1a", of.cast_map(Integer.class, i -> i + "a").first().get());
+
+
+    }
+
+    @Test
+    public void cast() {
+        List<Object> objs = Arrays.asList(1, 2, 3);
+        Lira<Object> of = Lira.of(objs);
+
+        Lira<Integer> cast = of.cast(Integer.class);
+
+        assertEquals(3, cast.size());
+
+
+        objs = Arrays.asList(1, "2", 3);
+        of = Lira.of(objs);
+
+        assertEquals(2, of.cast(Integer.class).size());
+    }
+
+    @Test
     public void toArray() {
 
-        Lira.none().forEach(no -> {
-            Assert.fail();
-        });
+        Lira.none().forEach(no -> Assert.fail());
         Assert.assertEquals(0, Lira.<Integer>none().stream().count());
         Assert.assertSame(Integer[].class, Lira.<Integer>none().toArray(Integer.class).getClass());
     }
@@ -80,15 +115,7 @@ public class LiraTest {
         Assert.assertSame(2, Lira.of(1, 2).size());
     }
 
-    @Test
-    public void append_remove() {
-        Assert.assertSame(Lira.none(), Lira.none());
 
-        Assert.assertSame(Lira.of(1).remove(1), Lira.none());
-        Assert.assertSame(1, Lira.of(1).remove(2).first().get());
-
-        Assert.assertSame(2, Lira.of(1).remove(1).append(2).first().get());
-    }
 
 
 }
