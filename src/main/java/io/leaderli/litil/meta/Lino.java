@@ -232,7 +232,7 @@ public abstract class Lino<T> implements LiValue {
      * @param <V>       type parameter of map value
      * @return lino of correct type declare
      */
-    public abstract <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType);
+    public abstract <K, V> Lino<Map<K, V>> cast(Class<K> keyType, Class<V> valueType);
 
     /**
      * Some represent a defined {@link Lino} . It contains a value which can not be null
@@ -310,8 +310,13 @@ public abstract class Lino<T> implements LiValue {
         }
 
         @Override
-        public <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType) {
-            return Lino.of(LiClassUtil.filterCanCast(cast(Map.class).get(), keyType, valueType));
+        public <K, V> Lino<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
+            Map<K, V> kvMap = LiClassUtil.filterCanCast(cast(Map.class).get(), keyType, valueType);
+
+            if (kvMap.isEmpty()) {
+                return Lino.none();
+            }
+            return Lino.of(kvMap);
         }
 
 
@@ -454,7 +459,7 @@ public abstract class Lino<T> implements LiValue {
         }
 
         @Override
-        public <K, V> Lino<Map<K, V>> toMap(Class<K> keyType, Class<V> valueType) {
+        public <K, V> Lino<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
             return Lino.none();
         }
 

@@ -3,9 +3,7 @@ package io.leaderli.litil.meta;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -40,6 +38,20 @@ public class LiraTest {
 
         Lira.<String>none().map(String::length);
         Assert.assertSame(2, Lira.of(1, 2, 3).map(i -> i + 1).first().get());
+    }
+
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    @Test
+    public void toMap() {
+
+        Map map = new HashMap<>();
+        map.put("1", "1");
+        map.put("2", 1);
+        map.put(3, "1");
+
+        Assert.assertEquals(1, Lira.of(map).cast(String.class, String.class).size());
+        Assert.assertEquals(0, Lira.of(map).cast(Boolean.class, String.class).size());
+        Assert.assertEquals(Lira.none(), Lira.none().cast(Boolean.class, String.class));
     }
 
     @Test
@@ -114,8 +126,6 @@ public class LiraTest {
         Assert.assertFalse(Lira.of(1).get().isEmpty());
         Assert.assertSame(2, Lira.of(1, 2).size());
     }
-
-
 
 
 }

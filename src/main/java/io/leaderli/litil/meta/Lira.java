@@ -3,10 +3,7 @@ package io.leaderli.litil.meta;
 import io.leaderli.litil.exception.LiAssertUtil;
 import io.leaderli.litil.type.LiClassUtil;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -143,6 +140,17 @@ public abstract class Lira<T> implements LiValue {
     public abstract <R> Lira<R> cast(Class<R> castType);
 
     /**
+     * the underlying  list value is map
+     *
+     * @param keyType   type of map key
+     * @param valueType type of  map value
+     * @param <K>       type parameter of map key
+     * @param <V>       type parameter of map value
+     * @return lira of correct type declare
+     */
+    public abstract <K, V> Lira<Map<K, V>> cast(Class<K> keyType, Class<V> valueType);
+
+    /**
      * @param mapping convert underlying list lino to other type
      * @param <R>     the type parameter of converted type
      * @return return new  Lira of type R
@@ -248,6 +256,17 @@ public abstract class Lira<T> implements LiValue {
         }
 
         @Override
+        public <K, V> Lira<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
+
+            List<Map<K, V>> collect = this.linos.stream()
+                    .map(lino -> lino.cast(keyType, valueType).get())
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            return of(collect);
+
+        }
+
+        @Override
         public <R> Lira<R> map(Function<? super T, ? extends R> mapping) {
             List<R> list = this.linos.stream()
                     .map(lino -> lino.map(mapping).get())
@@ -289,7 +308,6 @@ public abstract class Lira<T> implements LiValue {
      * @param <T> The type of the optional value.
      */
 
-    @SuppressWarnings("unchecked")
     static final class None<T> extends Lira<T> {
         /**
          * The singleton instance of None.
@@ -351,12 +369,17 @@ public abstract class Lira<T> implements LiValue {
 
         @Override
         public <R> Lira<R> cast(Class<R> castType) {
-            return (Lira<R>) this;
+            return none();
+        }
+
+        @Override
+        public <K, V> Lira<Map<K, V>> cast(Class<K> keyType, Class<V> valueType) {
+            return none();
         }
 
         @Override
         public <R> Lira<R> map(Function<? super T, ? extends R> mapping) {
-            return (Lira<R>) this;
+            return none();
         }
 
         @Override
