@@ -6,6 +6,7 @@ import io.leaderli.litil.util.LiBooleanUtil;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -196,6 +197,15 @@ public abstract class Lino<T> implements LiValue {
 
 
     /**
+     * @param castType the type of value lira can be cast
+     * @param <R>      the type parameter to the lira
+     * @return a lira produced by lino that have underlying list value
+     * @see #cast(Class)
+     * @see #lira(Function)
+     */
+    public abstract <R> Lira<R> lira(Class<R> castType);
+
+    /**
      * @param mapping the function convert lino to Iterable
      * @param <R>     the type parameter of lira componentType
      * @return a lira produced by lino
@@ -271,12 +281,19 @@ public abstract class Lino<T> implements LiValue {
 
         @Override
         public <R> Lino<R> map(Function<? super T, ? extends R> mapping) {
-            return of(mapping.apply(this.value));
+            return Lino.of(mapping.apply(this.value));
         }
 
         @Override
         public <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping) {
             return cast(castType).map(mapping);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public <R> Lira<R> lira(Class<R> castType) {
+            Lira<Object> lira = cast(List.class).lira(li -> li);
+            return lira.cast(castType);
         }
 
         @Override
@@ -435,6 +452,11 @@ public abstract class Lino<T> implements LiValue {
         @Override
         public <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping) {
             return (Lino<R2>) this;
+        }
+
+        @Override
+        public <R> Lira<R> lira(Class<R> castType) {
+            return Lira.none();
         }
 
         @Override

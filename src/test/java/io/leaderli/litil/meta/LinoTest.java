@@ -144,6 +144,12 @@ public class LinoTest {
         Assert.assertEquals(2, lira.size());
         lira = of.liraByIterator(List::iterator);
         Assert.assertEquals(2, lira.size());
+
+        System.out.println(Lira.none());
+        System.out.println(Lira.of(1));
+        Assert.assertEquals("List[Some(1), Some(2)]", Lino.of(Arrays.asList(1, 2)).lira(Integer.class).toString());
+        Assert.assertEquals("Empty[]", Lino.of(Arrays.asList(1, 2)).lira(String.class).toString());
+
     }
 
     @Test
