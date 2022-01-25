@@ -44,6 +44,8 @@ import java.util.function.Supplier;
  *     <li> {@link #filter(Function)}</li>
  *     <li> {@link #cast(Class)} }</li>
  *     <li> {@link #map(Function)}</li>
+ *     <li> {@link #safe_map(LiFunction)}</li>
+ *     <li> {@link #safe_map(LiFunction, boolean)}</li>
  * </ul>
  *
  * <ul>
@@ -62,7 +64,7 @@ import java.util.function.Supplier;
  * @author leaderli
  * @since 2022/1/21 4:15 PM
  */
-public abstract class Lino<T> implements LiValue {
+public interface Lino<T> extends LiValue {
 
 
     /**
@@ -75,7 +77,7 @@ public abstract class Lino<T> implements LiValue {
      * @return the given {@code Lino} instance as narrowed type {@code Lino<T>}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Lino<T> narrow(Lino<? extends T> value) {
+    static <T> Lino<T> narrow(Lino<? extends T> value) {
 
         return (Lino<T>) value;
 
@@ -87,13 +89,13 @@ public abstract class Lino<T> implements LiValue {
      * @param <T> component type
      * @return the single instance of {@code None}
      */
-    public static <T> Lino<T> none() {
+    static <T> Lino<T> none() {
         @SuppressWarnings("unchecked") final None<T> none = (None<T>) None.INSTANCE;
         return none;
     }
 
 
-    public static <T> Lino<T> of(T value) {
+    static <T> Lino<T> of(T value) {
         if (value == null) {
             return none();
         }
@@ -105,7 +107,7 @@ public abstract class Lino<T> implements LiValue {
      *
      * @return A value of type {@code T} or {@code null}.
      */
-    public abstract T get();
+    T get();
 
     /**
      * return the underlying value if present ,otherwise {@code other}
@@ -113,7 +115,7 @@ public abstract class Lino<T> implements LiValue {
      * @param other An alternative value
      * @return A value of type {@code T}
      */
-    public final T getOrElse(T other) {
+    default T getOrElse(T other) {
 
         return isEmpty() ? other : get();
     }
@@ -124,7 +126,7 @@ public abstract class Lino<T> implements LiValue {
      * @param supplier An alternative value supplier.
      * @return A value of type {@code T}
      */
-    public final T getOrElse(Supplier<? extends T> supplier) {
+    default T getOrElse(Supplier<? extends T> supplier) {
 
         return isEmpty() && supplier != null ? supplier.get() : get();
     }
@@ -134,32 +136,32 @@ public abstract class Lino<T> implements LiValue {
      * @param action The action that will be performed if underlying value {@code isPresent()}
      * @return this
      */
-    public abstract Lino<T> then(Consumer<? super T> action);
+    Lino<T> then(Consumer<? super T> action);
 
     /**
      * @param action The action that will be performed if underlying value {@code isEmpty()}
      * @return this
      */
-    public abstract Lino<T> error(Runnable action);
+    Lino<T> error(Runnable action);
 
 
     /**
      * @param other a  value
      * @return return {@code of(other)} if {@code isEmpty} otherwise return this
      */
-    public abstract Lino<T> orOther(T other);
+    Lino<T> orOther(T other);
 
     /**
      * @param other a supplier return a value
      * @return return {@code of(other.get())} if {@code isEmpty} otherwise return this
      */
-    public abstract Lino<T> orOther(Supplier<T> other);
+    Lino<T> orOther(Supplier<T> other);
 
     /**
      * @param other a Lino
      * @return return {@code other} if {@code isEmpty} otherwise return this
      */
-    public abstract Lino<T> orOther(Lino<T> other);
+    Lino<T> orOther(Lino<T> other);
 
     /**
      * @param filter the function return a object value that object type decide the Lino value should remain
@@ -168,9 +170,9 @@ public abstract class Lino<T> implements LiValue {
      * otherwise {@code None}
      * @see LiBooleanUtil#parseBoolean(Object)
      */
-    public abstract Lino<T> filter(Function<? super T, Object> filter);
+    Lino<T> filter(Function<? super T, Object> filter);
 
-    public final Lino<T> filter(boolean remain) {
+    default Lino<T> filter(boolean remain) {
         return filter(t -> remain);
     }
 
@@ -180,20 +182,39 @@ public abstract class Lino<T> implements LiValue {
      * @param <R>      the type parameter to the value
      * @return new LiMono with value of casted type
      */
-    public abstract <R> Lino<R> cast(Class<R> castType);
+    <R> Lino<R> cast(Class<R> castType);
 
     /**
      * @param mapping a function to apply value
      * @param <R>     the type parameter of mapped value
      * @return the new Lino with componentType {@code R}
+     * it's may be throw exception,when apply function throw some Exception
      */
-    public abstract <R> Lino<R> map(Function<? super T, ? extends R> mapping);
+    <R> Lino<R> map(Function<? super T, ? extends R> mapping);
+
+    /**
+     * log = false;
+     *
+     * @see #safe_map(LiFunction, boolean)
+     */
+    default <R> Lino<R> safe_map(LiFunction<? super T, ? extends R> mapping) {
+        return this.safe_map(mapping, false);
+    }
+
+    /**
+     * @param mapping a function to apply value
+     * @param <R>     the type parameter of mapped value
+     * @param log     printStackTrace when  error occurs if true
+     * @return the new Lino with componentType {@code R} , return {@code None} if throwable occurs
+     */
+    <R> Lino<R> safe_map(LiFunction<? super T, ? extends R> mapping, boolean log);
 
     /**
      * @see #cast(Class)
      * @see #map(Function)
+     * it's may be throw exception,when apply function throw some Exception
      */
-    public abstract <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping);
+    <R1, R2> Lino<R2> cast_map(Class<R1> castType, Function<? super R1, ? extends R2> mapping);
 
 
     /**
@@ -203,21 +224,21 @@ public abstract class Lino<T> implements LiValue {
      * @see #cast(Class)
      * @see #lira(Function)
      */
-    public abstract <R> Lira<R> lira(Class<R> castType);
+    <R> Lira<R> lira(Class<R> castType);
 
     /**
      * @param mapping the function convert lino to Iterable
      * @param <R>     the type parameter of lira componentType
      * @return a lira produced by lino
      */
-    public abstract <R> Lira<R> lira(Function<T, Iterable<R>> mapping);
+    <R> Lira<R> lira(Function<T, Iterable<R>> mapping);
 
     /**
      * @param mapping the function convert lino to  array
      * @param <R>     the type parameter of lira componentType
      * @return a lira produced by lino
      */
-    public abstract <R> Lira<R> liraByArray(Function<T, R[]> mapping);
+    <R> Lira<R> liraByArray(Function<T, R[]> mapping);
 
 
     /**
@@ -225,13 +246,13 @@ public abstract class Lino<T> implements LiValue {
      * @param <R>     the type parameter of lira componentType
      * @return a lira produced by lino
      */
-    public abstract <R> Lira<R> liraByIterator(Function<T, Iterator<R>> mapping);
+    <R> Lira<R> liraByIterator(Function<T, Iterator<R>> mapping);
 
     /**
      * @param <E> the type parameter of LiCase 2nd componentType
      * @return a new LiCase<T,E>
      */
-    public abstract <E> LiCase<T, E> toLiCase();
+    <E> LiCase<T, E> toLiCase();
 
     /**
      * the underlying  value is map
@@ -242,14 +263,14 @@ public abstract class Lino<T> implements LiValue {
      * @param <V>       type parameter of map value
      * @return lino of correct type declare
      */
-    public abstract <K, V> Lino<Map<K, V>> cast(Class<K> keyType, Class<V> valueType);
+    <K, V> Lino<Map<K, V>> cast(Class<K> keyType, Class<V> valueType);
 
     /**
      * Some represent a defined {@link Lino} . It contains a value which can not be null
      *
      * @param <T> the type of the optional value.
      */
-    static final class Some<T> extends Lino<T> {
+    final class Some<T> implements Lino<T> {
 
         private final T value;
 
@@ -282,6 +303,19 @@ public abstract class Lino<T> implements LiValue {
         @Override
         public <R> Lino<R> map(Function<? super T, ? extends R> mapping) {
             return Lino.of(mapping.apply(this.value));
+        }
+
+        @Override
+        public <R> Lino<R> safe_map(LiFunction<? super T, ? extends R> mapping, boolean log) {
+            try {
+                return of(mapping.apply(this.value));
+            } catch (Throwable throwable) {
+
+                if (log) {
+                    throwable.printStackTrace();
+                }
+            }
+            return Lino.none();
         }
 
         @Override
@@ -416,7 +450,7 @@ public abstract class Lino<T> implements LiValue {
      * @param <T> The type of the optional value.
      */
     @SuppressWarnings("unchecked")
-    static final class None<T> extends Lino<T> {
+    final class None<T> implements Lino<T> {
         /**
          * The singleton instance of None.
          */
@@ -446,6 +480,11 @@ public abstract class Lino<T> implements LiValue {
 
         @Override
         public <R> Lino<R> map(Function<? super T, ? extends R> mapping) {
+            return (Lino<R>) this;
+        }
+
+        @Override
+        public <R> Lino<R> safe_map(LiFunction<? super T, ? extends R> mapping, boolean log) {
             return (Lino<R>) this;
         }
 

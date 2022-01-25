@@ -1,7 +1,9 @@
 package io.leaderli.litil.meta;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.*;
 
@@ -122,6 +124,10 @@ public class LinoTest {
         Assert.assertSame(1, Lino.of(a).cast(Integer.class).get());
     }
 
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void cast_map() {
         Lino.of(null).cast_map(String.class, s -> null);
@@ -129,6 +135,13 @@ public class LinoTest {
         Assert.assertSame(2, Lino.of(a).cast_map(Integer.class, i -> ++i).get());
         Assert.assertNull(Lino.of(a).cast_map(String.class, i -> i).get());
         Assert.assertNull(Lino.of(a).cast_map(Integer.class, i -> null).get());
+
+
+        Lino.of(0).safe_map(i -> 5 / i, true);
+        Lino.of(0).safe_map(i -> 5 / i);
+        thrown.expect(ArithmeticException.class);
+        Lino.of(0).map(i -> 5 / i);
+
     }
 
     @Test

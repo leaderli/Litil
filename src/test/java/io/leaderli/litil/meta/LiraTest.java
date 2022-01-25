@@ -1,7 +1,9 @@
 package io.leaderli.litil.meta;
 
 import org.junit.Assert;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.*;
 
@@ -33,11 +35,18 @@ public class LiraTest {
         Assert.assertNotSame(Lira.of(1), Lira.of(1));
     }
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
     @Test
     public void map() {
 
         Lira.<String>none().map(String::length);
         Assert.assertSame(2, Lira.of(1, 2, 3).map(i -> i + 1).first().get());
+        Lira.of(0).safe_map(i -> 5 / i, true).get();
+        Lira.of(0).safe_map(i -> 5 / i).get();
+        thrown.expect(ArithmeticException.class);
+        Lira.of(0).map(i -> 5 / i);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
