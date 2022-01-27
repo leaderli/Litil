@@ -137,7 +137,7 @@ public class LinoTest {
         Assert.assertNull(Lino.of(a).cast_map(Integer.class, i -> null).get());
 
 
-        Lino.of(0).safe_map(i -> 5 / i, true);
+        Lino.of(0).safe_map(i -> 5 / i, false);
         Lino.of(0).safe_map(i -> 5 / i);
         thrown.expect(ArithmeticException.class);
         Lino.of(0).map(i -> 5 / i);

@@ -2,6 +2,7 @@ package io.leaderli.litil.bit;
 
 import io.leaderli.litil.meta.Lino;
 import io.leaderli.litil.meta.Lira;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -63,9 +64,10 @@ public class BitUtil {
     }
 
 
-    public static String transferSetBinariesToNames(int value, Class<?> stateClass) {
 
 
+    @NotNull
+    public static List<String> getBinaryStateNames(Class<?> stateClass) {
         ToIntFunction<Field> toInt = field -> {
             try {
                 if (field.getType() == Integer.class || field.getType() == int.class) {
@@ -89,7 +91,6 @@ public class BitUtil {
         for (int i = 0; i < 31; i++) {
             Lino.of(map.get(1 << i)).filter(v -> v.trim().length() > 0).then(states::add);
         }
-        return transferSetBinariesToNames(value, states);
-
+        return states;
     }
 }
