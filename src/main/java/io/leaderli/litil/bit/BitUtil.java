@@ -1,6 +1,5 @@
 package io.leaderli.litil.bit;
 
-import io.leaderli.litil.meta.Lino;
 import io.leaderli.litil.meta.Lira;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,11 +58,14 @@ public class BitUtil {
      */
     public static String transferSetBinariesToNames(int value, List<String> states) {
 
-        return String.join("|", Lira.of(getSetBinaries(value)).safe_map(bi -> states.get(bi.length)).getRaw());
+        return String.join("|",
+                Lira.of(getSetBinaries(value))
+                        .safe_map(bi -> states.get(bi.length))
+                        .filter(name -> name.length() > 0)
+                        .getRaw()
+        );
 
     }
-
-
 
 
     @NotNull
@@ -87,9 +89,15 @@ public class BitUtil {
             map.put(toInt.applyAsInt(field), field.getName());
         }
 
+        int x = map.keySet().stream().max(Integer::compareTo).orElse(0);
+
         List<String> states = new ArrayList<>();
         for (int i = 0; i < 31; i++) {
-            Lino.of(map.get(1 << i)).filter(v -> v.trim().length() > 0).then(states::add);
+            int key = 1 << i;
+            states.add(map.getOrDefault(key, ""));
+            if (key >= x) {
+                break;
+            }
         }
         return states;
     }

@@ -37,7 +37,7 @@ public class BitUtilTest {
 
         int A = 0b1;
         int B = 0b10;
-        int C = 0b100;
+        int C = 0b1000;
     }
 
     @Test
@@ -45,8 +45,12 @@ public class BitUtilTest {
 
 
         List<String> stateNames = BitUtil.getBinaryStateNames(TestMask.class);
-        Assert.assertEquals("[A, B, C]", stateNames.toString());
-        Assert.assertEquals("A|B", BitUtil.transferSetBinariesToNames(123, stateNames));
+        Assert.assertEquals("[A, B, , C]", stateNames.toString());
+        Assert.assertEquals("C", BitUtil.transferSetBinariesToNames(8, stateNames));
+
+        Assert.assertEquals("", BitUtil.transferSetBinariesToNames(16, stateNames));
+        Assert.assertEquals("", BitUtil.transferSetBinariesToNames(4, stateNames));
+        Assert.assertEquals("A|B|C", BitUtil.transferSetBinariesToNames(123, stateNames));
         Assert.assertEquals("A", BitUtil.transferSetBinariesToNames(1, stateNames));
         Assert.assertEquals("", BitUtil.transferSetBinariesToNames(0, stateNames));
 
