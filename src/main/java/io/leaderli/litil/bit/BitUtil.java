@@ -1,7 +1,7 @@
 package io.leaderli.litil.bit;
 
+import io.leaderli.litil.exception.LiAssertUtil;
 import io.leaderli.litil.meta.Lira;
-import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -52,24 +52,24 @@ public class BitUtil {
 
     /**
      * @param value  a value use bit mark to represent state
-     * @param states the state name
+     * @param states the state name array, always with length 32
      * @return the states of exists bit mark
      * i.e   ["a","b","c"]  0b110 -->   'b|c'
      */
-    public static String transferSetBinariesToNames(int value, List<String> states) {
+    public static String transferSetBinariesToNames(int value, String[] states) {
 
+        LiAssertUtil.assertTrue(states.length == 32);
         return String.join("|",
                 Lira.of(getSetBinaries(value))
-                        .safe_map(bi -> states.get(bi.length))
-                        .filter(name -> name.length() > 0)
+                        .safe_map(bi -> states[bi.length])
+                        .trim()
                         .getRaw()
         );
 
     }
 
 
-    @NotNull
-    public static List<String> getBinaryStateNames(Class<?> stateClass) {
+    public static String[] getBinaryStateNames(Class<?> stateClass) {
         ToIntFunction<Field> toInt = field -> {
             try {
                 if (field.getType() == Integer.class || field.getType() == int.class) {
@@ -91,10 +91,10 @@ public class BitUtil {
 
         int x = map.keySet().stream().max(Integer::compareTo).orElse(0);
 
-        List<String> states = new ArrayList<>();
-        for (int i = 0; i < 31; i++) {
+        String[] states = new String[32];
+        for (int i = 0; i < states.length; i++) {
             int key = 1 << i;
-            states.add(map.getOrDefault(key, ""));
+            states[i] = map.get(key);
             if (key >= x) {
                 break;
             }

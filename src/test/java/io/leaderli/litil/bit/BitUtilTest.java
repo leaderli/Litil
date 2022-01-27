@@ -3,7 +3,7 @@ package io.leaderli.litil.bit;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * @author leaderli
@@ -44,8 +44,8 @@ public class BitUtilTest {
     public void transferSetBinariesToNames() {
 
 
-        List<String> stateNames = BitUtil.getBinaryStateNames(TestMask.class);
-        Assert.assertEquals("[A, B, , C]", stateNames.toString());
+        String[] stateNames = BitUtil.getBinaryStateNames(TestMask.class);
+        Assert.assertEquals("[A, B, null, C, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null]", Arrays.toString(stateNames));
         Assert.assertEquals("C", BitUtil.transferSetBinariesToNames(8, stateNames));
 
         Assert.assertEquals("", BitUtil.transferSetBinariesToNames(16, stateNames));
