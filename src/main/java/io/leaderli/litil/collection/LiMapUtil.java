@@ -15,7 +15,7 @@ public class LiMapUtil {
         return _override(origin, override);
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    @SuppressWarnings("all")
     private static <T> T _override(T origin, T override) {
 
         if (origin == null) {

@@ -39,5 +39,13 @@ public class LiCaseTest {
 
         of = liCase.lino();
         Assert.assertEquals(3, of.get().intValue());
+
+        liCase = LiCase.of(Lino.of(123));
+
+        Assert.assertEquals(Lino.none(), liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino());
+        liCase = LiCase.of(Lino.of("123"));
+        Assert.assertEquals(3, liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino().get().intValue());
+
+
     }
 }

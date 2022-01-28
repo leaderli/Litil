@@ -7,6 +7,7 @@ package io.leaderli.litil.meta;
 public interface LiFunction<T, R> {
 
 
+    @SuppressWarnings("all")
     R apply(T t) throws Throwable;
 
 }

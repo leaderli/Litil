@@ -11,7 +11,7 @@ import java.util.function.Function;
  * @param <T> the type parameter of lino
  * @param <E> the type parameter of mapping lino
  */
-public abstract class LiCase<T, E> {
+public interface LiCase<T, E> {
 
     /**
      * @param lino the origin  lino
@@ -19,14 +19,14 @@ public abstract class LiCase<T, E> {
      * @param <E>  the type parameter of transferred  lino
      * @return new LiCase
      */
-    public static <T, E> LiCase<T, E> of(Lino<T> lino) {
+    static <T, E> LiCase<T, E> of(Lino<T> lino) {
         if (lino == null || lino.isEmpty()) {
             return none();
         }
         return new Some<>(lino);
     }
 
-    public static <T, E> LiCase<T, E> none() {
+    static <T, E> LiCase<T, E> none() {
         @SuppressWarnings("unchecked") final LiCase<T, E> none = (None<T, E>) None.INSTANCE;
         return none;
     }
@@ -39,7 +39,7 @@ public abstract class LiCase<T, E> {
      * @param mapping function<T,E> to convert Lino<T> to lino<E>
      * @return this
      */
-    public abstract LiCase<T, E> filter_map(Function<? super T, Object> filter, Function<? super T, ? extends E> mapping);
+    LiCase<T, E> filter_map(Function<? super T, Object> filter, Function<? super T, ? extends E> mapping);
 
     /**
      * not really  apply function<R,E>  ,just cache it
@@ -70,7 +70,7 @@ public abstract class LiCase<T, E> {
     public abstract Lino<E> lino();
 
 
-    static final class Some<T, E> extends LiCase<T, E> {
+    static final class Some<T, E> implements LiCase<T, E> {
 
         private final Lino<T> lino;
 
@@ -119,7 +119,7 @@ public abstract class LiCase<T, E> {
     }
 
 
-    static final class None<T, E> extends LiCase<T, E> {
+    static final class None<T, E> implements LiCase<T, E> {
         /**
          * The singleton instance of None.
          */
