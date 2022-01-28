@@ -1,6 +1,7 @@
 package io.leaderli.litil.meta;
 
 
+import io.leaderli.litil.exception.LiMonoRuntimeException;
 import io.leaderli.litil.type.LiClassUtil;
 import io.leaderli.litil.util.LiBooleanUtil;
 import org.jetbrains.annotations.NotNull;
@@ -137,6 +138,14 @@ public interface Lino<T> extends LiValue {
      * @return this
      */
     Lino<T> then(Consumer<? super T> action);
+
+    /**
+     * @param action The action that will be performed if underlying value {@code isPresent()}
+     * @return this
+     * @throws Throwable the consumer may throw exception
+     */
+    @SuppressWarnings("all")
+    Lino<T> throwable(LiConsumer<? super T> action);
 
     /**
      * @param action The action that will be performed if underlying value {@code isEmpty()}
@@ -292,6 +301,16 @@ public interface Lino<T> extends LiValue {
         @Override
         public Lino<T> then(Consumer<? super T> action) {
             action.accept(value);
+            return this;
+        }
+
+        @Override
+        public Lino<T> throwable(LiConsumer<? super T> action) {
+            try {
+                action.accept(value);
+            } catch (Throwable e) {
+                throw new LiMonoRuntimeException(e);
+            }
             return this;
         }
 
@@ -469,6 +488,11 @@ public interface Lino<T> extends LiValue {
 
         @Override
         public Lino<T> then(Consumer<? super T> action) {
+            return this;
+        }
+
+        @Override
+        public Lino<T> throwable(LiConsumer<? super T> action) {
             return this;
         }
 

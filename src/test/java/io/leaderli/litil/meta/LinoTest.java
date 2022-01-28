@@ -1,5 +1,6 @@
 package io.leaderli.litil.meta;
 
+import io.leaderli.litil.exception.LiMonoRuntimeException;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -68,6 +69,11 @@ public class LinoTest {
         }).error(() -> {
         }).isEmpty();
 
+        thrown.expect(LiMonoRuntimeException.class);
+        thrown.expectMessage("java.lang.ArithmeticException: / by zero");
+        Lino<Integer> throwable = Lino.of(0).throwable(in -> {
+            int i = 1 / in;
+        });
     }
 
     @Test
