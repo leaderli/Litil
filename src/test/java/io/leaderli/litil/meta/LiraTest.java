@@ -94,6 +94,7 @@ public class LiraTest {
     public void toArray() {
 
         Lira.none().forEach(no -> Assert.fail());
+        Lira.none().forEachLino(no -> Assert.fail());
         Assert.assertEquals(0, Lira.<Integer>none().stream().count());
         Assert.assertSame(Integer[].class, Lira.<Integer>none().toArray(Integer.class).getClass());
     }

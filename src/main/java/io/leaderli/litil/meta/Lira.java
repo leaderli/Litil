@@ -188,6 +188,10 @@ public interface Lira<T> extends LiValue {
         return cast(type).map(mapping);
     }
 
+    default void forEachLino(Consumer<Lino<T>> consumer) {
+        get().forEach(consumer);
+    }
+
     default void forEach(Consumer<T> consumer) {
         getRaw().forEach(consumer);
     }

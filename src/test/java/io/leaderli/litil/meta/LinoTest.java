@@ -71,8 +71,10 @@ public class LinoTest {
 
         thrown.expect(LiMonoRuntimeException.class);
         thrown.expectMessage("java.lang.ArithmeticException: / by zero");
-        Lino<Integer> throwable = Lino.of(0).throwable(in -> {
-            int i = 1 / in;
+        Lino.of(0).throwable(in -> {
+            @SuppressWarnings("unused") int i = 1 / in;
+            Assert.fail();
+
         });
     }
 
@@ -121,6 +123,14 @@ public class LinoTest {
         Assert.assertNull(mono.filter(it -> test).get());
         test.put("key", "value");
         Assert.assertNotNull(mono.filter(it -> test).get());
+
+
+        String s = "1";
+
+        Assert.assertTrue(Lino.of(s).same(s).isPresent());
+        //noinspection StringOperationCanBeSimplified
+        Assert.assertTrue(Lino.of(s).same(new String("1")).isEmpty());
+        Assert.assertTrue(Lino.of(s).equalsTo("1").isPresent());
     }
 
     @Test

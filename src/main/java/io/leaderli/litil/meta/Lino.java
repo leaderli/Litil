@@ -35,6 +35,7 @@ import java.util.function.Supplier;
  *     <li>{@link #getOrElse(Object)} ()}</li>
  *     <li>{@link #getOrElse(Supplier)} ()}</li>
  *     <li>{@link #then(Consumer)}</li>
+ *     <li>{@link #throwable(LiConsumer)}</li>
  *     <li>{@link #error(Runnable)}</li>
  * </ul>
  * <p>
@@ -180,6 +181,18 @@ public interface Lino<T> extends LiValue {
      * @see LiBooleanUtil#parseBoolean(Object)
      */
     Lino<T> filter(Function<? super T, Object> filter);
+
+    /**
+     * @param other a value
+     * @return this if value == this.value otherwise None
+     */
+    Lino<T> same(T other);
+
+    /**
+     * @param other a value
+     * @return this if value.equals(this.value) otherwise None
+     */
+    Lino<T> equalsTo(T other);
 
     default Lino<T> filter(boolean remain) {
         return filter(t -> remain);
@@ -415,6 +428,22 @@ public interface Lino<T> extends LiValue {
         }
 
         @Override
+        public Lino<T> same(T other) {
+            if (this.value == other) {
+                return this;
+            }
+            return none();
+        }
+
+        @Override
+        public Lino<T> equalsTo(T other) {
+            if (this.value.equals(other)) {
+                return this;
+            }
+            return none();
+        }
+
+        @Override
         public <R> Lino<R> cast(Class<R> castType) {
             if (LiClassUtil.isAssignableFromOrIsWrapper(castType, this.value.getClass())) {
                 //noinspection unchecked
@@ -566,6 +595,16 @@ public interface Lino<T> extends LiValue {
 
         @Override
         public Lino<T> filter(Function<? super T, Object> filter) {
+            return this;
+        }
+
+        @Override
+        public Lino<T> same(T other) {
+            return this;
+        }
+
+        @Override
+        public Lino<T> equalsTo(T other) {
             return this;
         }
 
