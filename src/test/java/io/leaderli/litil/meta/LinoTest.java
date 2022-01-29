@@ -125,12 +125,9 @@ public class LinoTest {
         Assert.assertNotNull(mono.filter(it -> test).get());
 
 
-        String s = "1";
 
-        Assert.assertTrue(Lino.of(s).same(s).isPresent());
-        //noinspection StringOperationCanBeSimplified
-        Assert.assertTrue(Lino.of(s).same(new String("1")).isEmpty());
-        Assert.assertTrue(Lino.of(s).equalsTo("1").isPresent());
+        Assert.assertTrue(Lino.of("1").same("1").isPresent());
+        Assert.assertTrue(Lino.of("2").same("1").isEmpty());
     }
 
     @Test

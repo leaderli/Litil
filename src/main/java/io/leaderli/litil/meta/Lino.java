@@ -182,17 +182,12 @@ public interface Lino<T> extends LiValue {
      */
     Lino<T> filter(Function<? super T, Object> filter);
 
-    /**
-     * @param other a value
-     * @return this if value == this.value otherwise None
-     */
-    Lino<T> same(T other);
 
     /**
      * @param other a value
      * @return this if value.equals(this.value) otherwise None
      */
-    Lino<T> equalsTo(T other);
+    Lino<T> same(T other);
 
     default Lino<T> filter(boolean remain) {
         return filter(t -> remain);
@@ -427,16 +422,9 @@ public interface Lino<T> extends LiValue {
             return none();
         }
 
-        @Override
-        public Lino<T> same(T other) {
-            if (this.value == other) {
-                return this;
-            }
-            return none();
-        }
 
         @Override
-        public Lino<T> equalsTo(T other) {
+        public Lino<T> same(T other) {
             if (this.value.equals(other)) {
                 return this;
             }
@@ -598,13 +586,9 @@ public interface Lino<T> extends LiValue {
             return this;
         }
 
-        @Override
-        public Lino<T> same(T other) {
-            return this;
-        }
 
         @Override
-        public Lino<T> equalsTo(T other) {
+        public Lino<T> same(T other) {
             return this;
         }
 
