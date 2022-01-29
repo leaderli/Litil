@@ -1,5 +1,8 @@
 package io.leaderli.litil.dom;
 
+
+import io.leaderli.litil.meta.Lino;
+import io.leaderli.litil.meta.Lira;
 import org.dom4j.DocumentException;
 import org.dom4j.Node;
 import org.dom4j.dom.DOMDocument;
@@ -18,7 +21,6 @@ import java.util.List;
  * <p>
  * using library dom4j and jaxen
  */
-@SuppressWarnings("unchecked")
 public class LiDomUtil {
 
 
@@ -72,7 +74,8 @@ public class LiDomUtil {
      */
     public static List<DOMElement> selectNodes(DOMElement element) {
 
-        return element.selectNodes("child::*");
+        return Lira.of(element.selectNodes("child::*")).cast(DOMElement.class).getRaw();
+
     }
 
     /**
@@ -81,7 +84,7 @@ public class LiDomUtil {
      */
     public static List<DOMElement> selectNodes(DOMElement element, String xpath) {
 
-        return element.selectNodes(xpath);
+        return Lira.of(element.selectNodes(xpath)).cast(DOMElement.class).getRaw();
     }
 
     /**
@@ -89,7 +92,8 @@ public class LiDomUtil {
      * @return the first child node query by xpath from element
      */
     public static DOMElement selectSingleNode(DOMElement element, String xpath) {
-        return (DOMElement) element.selectSingleNode(xpath);
+
+        return Lino.of(element.selectSingleNode(xpath)).cast(DOMElement.class).get();
     }
 
     public static void prettyPrint(Node node) {

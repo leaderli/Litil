@@ -67,8 +67,13 @@ public class LiDomUtilTest extends Assert {
         Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectSingleNode(dom, "t1").asXML());
         Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom, "t1").get(0).asXML());
         Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom).get(0).asXML());
-   
+
         Assert.assertEquals(0, LiDomUtil.selectNodes(dom, "t12").size());
+        dom = LiDomUtil.getDOMRootByInputStream(LiDomUtil.class.getResourceAsStream("/test1.xml"));
+        Assert.assertNotNull(dom);
+        dom = LiDomUtil.getDOMRootByString("<root></root>");
+        Assert.assertNotNull(dom);
+
     }
 
     @Test
@@ -82,5 +87,7 @@ public class LiDomUtilTest extends Assert {
                 "    <tt3>tt3</tt3> \n" +
                 "  </t3> \n" +
                 "</test>", LiDomUtil.pretty(dom));
+
+        LiDomUtil.prettyPrint(dom);
     }
 }
