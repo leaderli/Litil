@@ -435,7 +435,7 @@ public interface Lino<T> extends LiValue {
         public <R> Lino<R> cast(Class<R> castType) {
             if (LiClassUtil.isAssignableFromOrIsWrapper(castType, this.value.getClass())) {
                 //noinspection unchecked
-                return (Lino<R>) this;
+                return map(e -> LiClassUtil.cast(e, castType));
             }
             return none();
 
@@ -594,7 +594,7 @@ public interface Lino<T> extends LiValue {
 
         @Override
         public <R> Lino<R> cast(Class<R> castType) {
-            return (Lino<R>) this;
+            return none();
         }
 
         @Override
