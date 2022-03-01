@@ -1,7 +1,7 @@
 package io.leaderli.litil.bit;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author leaderli
@@ -12,10 +12,10 @@ public class BitEnumTest {
     @Test
     public void test() {
 
-        Assert.assertSame(0b1, BitEnum.values()[0].value);
+        Assertions.assertSame(0b1, BitEnum.values()[0].value);
 
         for (int i = 0; i < Integer.SIZE-1; i++) {
-            Assert.assertEquals(1 << i, BitEnum.values()[i ].value);
+            Assertions.assertEquals(1 << i, BitEnum.values()[i ].value);
         }
     }
 

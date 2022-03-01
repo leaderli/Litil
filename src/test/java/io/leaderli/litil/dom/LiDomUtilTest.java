@@ -2,10 +2,12 @@ package io.leaderli.litil.dom;
 
 import org.dom4j.DocumentException;
 import org.dom4j.dom.DOMElement;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-public class LiDomUtilTest extends Assert {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class LiDomUtilTest {
 
 
     private static class Visitor {
@@ -64,22 +66,22 @@ public class LiDomUtilTest extends Assert {
     public void selectSingleNode() throws DocumentException {
         DOMElement dom = LiDomUtil.getDOMRootByPath("/test1.xml");
 
-        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectSingleNode(dom, "t1").asXML());
-        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom, "t1").get(0).asXML());
-        Assert.assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom).get(0).asXML());
+        assertEquals("<t1>1</t1>", LiDomUtil.selectSingleNode(dom, "t1").asXML());
+        assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom, "t1").get(0).asXML());
+        assertEquals("<t1>1</t1>", LiDomUtil.selectNodes(dom).get(0).asXML());
 
-        Assert.assertEquals(0, LiDomUtil.selectNodes(dom, "t12").size());
+        assertEquals(0, LiDomUtil.selectNodes(dom, "t12").size());
         dom = LiDomUtil.getDOMRootByInputStream(LiDomUtil.class.getResourceAsStream("/test1.xml"));
-        Assert.assertNotNull(dom);
+        Assertions.assertNotNull(dom);
         dom = LiDomUtil.getDOMRootByString("<root></root>");
-        Assert.assertNotNull(dom);
+        Assertions.assertNotNull(dom);
 
     }
 
     @Test
     public void pretty() throws DocumentException {
         DOMElement dom = LiDomUtil.getDOMRootByPath("/test1.xml");
-        Assert.assertEquals("\n" +
+        assertEquals("\n" +
                 "<test> \n" +
                 "  <t1>1</t1>  \n" +
                 "  <t2>1</t2>  \n" +

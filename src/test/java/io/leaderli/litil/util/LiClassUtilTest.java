@@ -1,8 +1,8 @@
 package io.leaderli.litil.util;
 
 import io.leaderli.litil.type.LiClassUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,65 +10,85 @@ import java.util.HashMap;
 public class LiClassUtilTest {
     @Test
     public void primitiveToWrapper() {
-        Assert.assertNull(LiClassUtil.primitiveToWrapper(null));
-        Assert.assertSame(LiClassUtil.primitiveToWrapper(int.class), Integer.class);
-        Assert.assertSame(LiClassUtil.primitiveToWrapper(void.class), Void.class);
-        Assert.assertSame(LiClassUtil.primitiveToWrapper(String.class), String.class);
-        Assert.assertNull(LiClassUtil.primitiveToWrapper(null));
+        Assertions.assertNull(LiClassUtil.primitiveToWrapper(null));
+        Assertions.assertSame(LiClassUtil.primitiveToWrapper(int.class), Integer.class);
+        Assertions.assertSame(LiClassUtil.primitiveToWrapper(void.class), Void.class);
+        Assertions.assertSame(LiClassUtil.primitiveToWrapper(String.class), String.class);
+        Assertions.assertNull(LiClassUtil.primitiveToWrapper(null));
 
-        Assert.assertSame(LiClassUtil.primitiveToWrapper(int[].class), Integer[].class);
-        Assert.assertSame(LiClassUtil.primitiveToWrapper(String[].class), String[].class);
+        Assertions.assertSame(LiClassUtil.primitiveToWrapper(int[].class), Integer[].class);
+        Assertions.assertSame(LiClassUtil.primitiveToWrapper(String[].class), String[].class);
 
     }
 
     @Test
     public void isAssignableFromOrIsWrapper() {
 
-        Assert.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(null, null));
-        Assert.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(null, String.class));
-        Assert.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String.class, null));
-        Assert.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String.class, CharSequence.class));
-        Assert.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String[].class, CharSequence.class));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(null, null));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(null, String.class));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String.class, null));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String.class, CharSequence.class));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(String[].class, CharSequence.class));
 
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(int.class, Integer.class));
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(Integer.class, int.class));
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence.class, String.class));
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, String[].class));
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(int[].class, Integer[].class));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(int.class, Integer.class));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(Integer.class, int.class));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence.class, String.class));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, String[].class));
+        Assertions.assertFalse(LiClassUtil.isAssignableFromOrIsWrapper(int[].class, Integer[].class));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(int[].class, int[].class));
 
+
+        System.out.println(int[].class.isAssignableFrom(Integer[].class));
+        System.out.println(Integer[].class.isAssignableFrom(Integer[].class));
+        System.out.println(Integer[].class.isAssignableFrom(int[].class));
     }
 
     @Test
     public void getAppJars() {
 
-        Assert.assertTrue("file:/".matches("^[^/]++/$"));
-        Assert.assertTrue("jar:file:/".matches("^[^/]++/$"));
-        Assert.assertFalse("/jar/".matches("^[^/]++/$"));
-        Assert.assertTrue(LiClassUtil.getAppJars().size() > 0);
+        Assertions.assertTrue("file:/".matches("^[^/]++/$"));
+        Assertions.assertTrue("jar:file:/".matches("^[^/]++/$"));
+        Assertions.assertFalse("/jar/".matches("^[^/]++/$"));
+        Assertions.assertTrue(LiClassUtil.getAppJars().size() > 0);
 
 
     }
 
     @Test
+    public void test() throws Throwable{
+
+        for (String appJar : LiClassUtil.getAppJars()) {
+            System.out.println(appJar);
+        }
+
+    }
+    @Test
     public void array() {
 
-        Assert.assertSame(Integer[].class, LiClassUtil.array(Integer.class, 0).getClass());
-        Assert.assertSame(Integer[].class, LiClassUtil.array(int.class, 0).getClass());
+        Assertions.assertSame(Integer[].class, LiClassUtil.array(Integer.class, 0).getClass());
+        Assertions.assertSame(Integer[].class, LiClassUtil.array(int.class, 0).getClass());
 
-        Assert.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, LiClassUtil.array(String.class, 0).getClass()));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, LiClassUtil.array(String.class, 0).getClass()));
     }
 
     @Test
     public void cast() {
 
         Object a = "123";
-        Assert.assertEquals("123", LiClassUtil.cast(a, String.class));
-        Assert.assertNull(LiClassUtil.cast(a, int.class));
+        Assertions.assertEquals("123", LiClassUtil.cast(a, String.class));
+        Assertions.assertNull(LiClassUtil.cast(a, int.class));
 
 
         a = 1;
-        Assert.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, Integer.class));
-        Assert.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, int.class));
+        Assertions.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, Integer.class));
+        Assertions.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, int.class));
+        System.out.println(LiClassUtil.cast(a,int.class).getClass());
+
+        a = new int[]{1};
+
+        System.out.println(LiClassUtil.cast(a, int[].class));
+
+
     }
 
 
@@ -78,9 +98,9 @@ public class LiClassUtilTest {
         list.add(1);
         list.add("2");
         list.add(3);
-        Assert.assertSame(2, LiClassUtil.filterCanCast(list, Integer.class).size());
-        Assert.assertSame(2, LiClassUtil.filterCanCast(list, int.class).size());
-        Assert.assertSame(3, LiClassUtil.filterCanCast(list, Object.class).size());
+        Assertions.assertSame(2, LiClassUtil.filterCanCast(list, Integer.class).size());
+        Assertions.assertSame(2, LiClassUtil.filterCanCast(list, int.class).size());
+        Assertions.assertSame(3, LiClassUtil.filterCanCast(list, Object.class).size());
 
     }
 
@@ -91,9 +111,9 @@ public class LiClassUtilTest {
         HashMap<Object, Object> map = new HashMap<>();
         map.put("1", "1");
         map.put(2, 2);
-        Assert.assertEquals(1, LiClassUtil.filterCanCast(map, String.class, String.class).size());
-        Assert.assertEquals(1, LiClassUtil.filterCanCast(map, int.class, int.class).size());
-        Assert.assertEquals(0, LiClassUtil.filterCanCast(map, String.class, int.class).size());
+        Assertions.assertEquals(1, LiClassUtil.filterCanCast(map, String.class, String.class).size());
+        Assertions.assertEquals(1, LiClassUtil.filterCanCast(map, int.class, int.class).size());
+        Assertions.assertEquals(0, LiClassUtil.filterCanCast(map, String.class, int.class).size());
     }
 
 

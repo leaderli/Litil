@@ -1,9 +1,7 @@
 package io.leaderli.litil.event;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LiEventObjectStoreTest {
 
@@ -39,7 +37,7 @@ public class LiEventObjectStoreTest {
         @Override
         public void listen(TestLiEventObject source) {
 
-            Assert.assertEquals(source.getSource().get(), "123");
+            Assertions.assertEquals(source.getSource().get(), "123");
 
         }
 
@@ -65,10 +63,6 @@ public class LiEventObjectStoreTest {
     }
 
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
-
     @Test
     public void getPublisher() {
 
@@ -78,9 +72,11 @@ public class LiEventObjectStoreTest {
         eventStore.registerListener(new TestLiEventListener());
         eventStore.registerListener(new TestLiEventListener2());
 
-        thrown.expect(AssertionError.class);
-        eventStore.push(new TestLiEventObject("456"));
-        eventStore.push(null);
+        Assertions.assertThrows(AssertionError.class, () -> {
+
+            eventStore.push(new TestLiEventObject("456"));
+            eventStore.push(null);
+        });
 
     }
 
@@ -102,7 +98,7 @@ public class LiEventObjectStoreTest {
         @Override
         public void listen(TestLiEventObject source) {
 
-            Assert.assertEquals("Some(123)",
+            Assertions.assertEquals("Some(123)",
                     source.getSource().toString());
             count++;
 
@@ -121,12 +117,12 @@ public class LiEventObjectStoreTest {
         LiEventBus liEventBus = new LiEventBus();
 
         TempListener listener = new TempListener(true);
-        Assert.assertEquals(0, listener.count);
+        Assertions.assertEquals(0, listener.count);
         liEventBus.registerListener(listener);
         liEventBus.push(new TestLiEventObject("123"));
-        Assert.assertEquals(1, listener.count);
+        Assertions.assertEquals(1, listener.count);
         liEventBus.push(new TestLiEventObject("123"));
-        Assert.assertEquals(1, listener.count);
+        Assertions.assertEquals(1, listener.count);
 
     }
 
@@ -136,12 +132,12 @@ public class LiEventObjectStoreTest {
 
 
         TempListener listener = new TempListener(false);
-        Assert.assertEquals(0, listener.count);
+        Assertions.assertEquals(0, listener.count);
         liEventBus.registerListener(listener);
         liEventBus.push(new TestLiEventObject("123"));
-        Assert.assertEquals(1, listener.count);
+        Assertions.assertEquals(1, listener.count);
         liEventBus.push(new TestLiEventObject("123"));
-        Assert.assertEquals(2, listener.count);
+        Assertions.assertEquals(2, listener.count);
     }
 
 

@@ -2,9 +2,8 @@ package io.leaderli.litil.util;
 
 import io.leaderli.litil.exception.LiAssertException;
 import io.leaderli.litil.exception.LiAssertUtil;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /**
  * @author leaderli
@@ -12,28 +11,27 @@ import org.junit.rules.ExpectedException;
  */
 public class LiAssertUtilTest {
 
-    @Rule
-    public ExpectedException thrown= ExpectedException.none();
 
     @SuppressWarnings("all")
     @Test
     public void test() {
 
-        thrown.expect(LiAssertException.class);
-        thrown.expectMessage("");
-        LiAssertUtil.assertTrue(false);
+        Assertions.assertThrows(LiAssertException.class, () -> {
+            LiAssertUtil.assertTrue(false);
+        });
 
-        thrown.expect(LiAssertException.class);
-        thrown.expectMessage("123");
-        LiAssertUtil.assertTrue(false,"123");
+        LiAssertException thrown = Assertions.assertThrows(LiAssertException.class, () -> {
+            LiAssertUtil.assertTrue(false, "123");
+        });
+        Assertions.assertEquals(thrown.getMessage(), "123");
 
+        Assertions.assertThrows(LiAssertException.class, () -> {
+            LiAssertUtil.assertFalse(true);
+        });
 
-        thrown.expect(LiAssertException.class);
-        thrown.expectMessage("");
-        LiAssertUtil.assertFalse(true);
-
-        thrown.expect(LiAssertException.class);
-        thrown.expectMessage("123");
-        LiAssertUtil.assertFalse(true,"123");
+        thrown = Assertions.assertThrows(LiAssertException.class, () -> {
+            LiAssertUtil.assertFalse(true, "123");
+        });
+        Assertions.assertEquals(thrown.getMessage(), "123");
     }
 }

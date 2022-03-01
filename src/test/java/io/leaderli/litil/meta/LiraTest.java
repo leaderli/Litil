@@ -1,13 +1,11 @@
 package io.leaderli.litil.meta;
 
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author leaderli
@@ -19,34 +17,33 @@ public class LiraTest {
     @Test
     public void isEmpty() {
 
-        Assert.assertFalse(Lira.of().isPresent());
-        Assert.assertFalse(Lira.of((Object) null).isPresent());
-        Assert.assertTrue(Lira.of(1).isPresent());
+        Assertions.assertFalse(Lira.of().isPresent());
+        Assertions.assertFalse(Lira.of((Object) null).isPresent());
+        Assertions.assertTrue(Lira.of(1).isPresent());
     }
 
     @Test
     public void of() {
 
-        Assert.assertSame(Lira.none(), Lira.of());
-        Assert.assertSame(Lira.none(), Lira.of((Object) null));
-        Assert.assertSame(Lira.none(), Lira.of(Collections.emptyIterator()));
-        Assert.assertSame(Lira.none(), Lira.of(Collections.emptyList()));
-        Assert.assertNotSame(Lira.none(), Lira.of(1));
-        Assert.assertNotSame(Lira.of(1), Lira.of(1));
+        Assertions.assertSame(Lira.none(), Lira.of());
+        Assertions.assertSame(Lira.none(), Lira.of((Object) null));
+        Assertions.assertSame(Lira.none(), Lira.of(Collections.emptyIterator()));
+        Assertions.assertSame(Lira.none(), Lira.of(Collections.emptyList()));
+        Assertions.assertNotSame(Lira.none(), Lira.of(1));
+        Assertions.assertNotSame(Lira.of(1), Lira.of(1));
     }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void map() {
 
         Lira.<String>none().map(String::length);
-        Assert.assertSame(2, Lira.of(1, 2, 3).map(i -> i + 1).first().get());
+        Assertions.assertSame(2, Lira.of(1, 2, 3).map(i -> i + 1).first().get());
         Lira.of(0).safe_map(i -> 5 / i, false).get();
         Lira.of(0).safe_map(i -> 5 / i).get();
-        thrown.expect(ArithmeticException.class);
-        Lira.of(0).map(i -> 5 / i);
+        Assertions.assertThrows(ArithmeticException.class, () -> {
+            Lira.of(0).map(i -> 5 / i);
+        });
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -58,9 +55,9 @@ public class LiraTest {
         map.put("2", 1);
         map.put(3, "1");
 
-        Assert.assertEquals(1, Lira.of(map).cast(String.class, String.class).size());
-        Assert.assertEquals(0, Lira.of(map).cast(Boolean.class, String.class).size());
-        Assert.assertEquals(Lira.none(), Lira.none().cast(Boolean.class, String.class));
+        Assertions.assertEquals(1, Lira.of(map).cast(String.class, String.class).size());
+        Assertions.assertEquals(0, Lira.of(map).cast(Boolean.class, String.class).size());
+        Assertions.assertEquals(Lira.none(), Lira.none().cast(Boolean.class, String.class));
     }
 
     @Test
@@ -69,7 +66,7 @@ public class LiraTest {
         Lira<Object> of = Lira.of(objs);
 
 
-        Assert.assertEquals("1a", of.cast_map(Integer.class, i -> i + "a").first().get());
+        Assertions.assertEquals("1a", of.cast_map(Integer.class, i -> i + "a").first().get());
 
 
     }
@@ -93,30 +90,30 @@ public class LiraTest {
     @Test
     public void toArray() {
 
-        Lira.none().forEach(no -> Assert.fail());
-        Lira.none().forEachLino(no -> Assert.fail());
-        Assert.assertEquals(0, Lira.<Integer>none().stream().count());
-        Assert.assertSame(Integer[].class, Lira.<Integer>none().toArray(Integer.class).getClass());
+        Lira.none().forEach(no -> Assertions.fail());
+        Lira.none().forEachLino(no -> Assertions.fail());
+        Assertions.assertEquals(0, Lira.<Integer>none().stream().count());
+        Assertions.assertSame(Integer[].class, Lira.<Integer>none().toArray(Integer.class).getClass());
     }
 
     @Test
     public void filter() {
 
-        Assert.assertTrue(Lira.of(1, 2, 3).filter(i -> i > 4).isEmpty());
-        Assert.assertSame(2, Lira.of(1, 2, 3).filter(i -> i > 1).size());
-        Assert.assertSame(2, Lira.of(1, 2, 3).filter(i -> i > 1).get().get(0).get());
+        Assertions.assertTrue(Lira.of(1, 2, 3).filter(i -> i > 4).isEmpty());
+        Assertions.assertSame(2, Lira.of(1, 2, 3).filter(i -> i > 1).size());
+        Assertions.assertSame(2, Lira.of(1, 2, 3).filter(i -> i > 1).get().get(0).get());
 
-        Assert.assertEquals(3, Lira.of(1, 2, 3).trim().size());
-        Assert.assertEquals(2, Lira.of(1, null, 3).trim().size());
-        Assert.assertEquals(0, Lira.of((Object) null).trim().size());
+        Assertions.assertEquals(3, Lira.of(1, 2, 3).trim().size());
+        Assertions.assertEquals(2, Lira.of(1, null, 3).trim().size());
+        Assertions.assertEquals(0, Lira.of((Object) null).trim().size());
     }
 
     @Test
     public void first() {
 
-        Assert.assertSame(Lira.none().first(), Lino.none());
-        Assert.assertSame(1, Lira.of(1).first().get());
-        Assert.assertSame(2, Lira.of(1, 2, 3).first(i -> i > 1).get());
+        Assertions.assertSame(Lira.none().first(), Lino.none());
+        Assertions.assertSame(1, Lira.of(1).first().get());
+        Assertions.assertSame(2, Lira.of(1, 2, 3).first(i -> i > 1).get());
     }
 
     @Test
@@ -124,17 +121,17 @@ public class LiraTest {
 
         Lira<String> none = Lira.none();
 
-        Assert.assertEquals("1", none.getOrOther("1").get(0).get());
-        Assert.assertEquals("1", Lira.of("1", "2").getOrOther(Arrays.asList("5", "4")).get(0).get());
+        Assertions.assertEquals("1", none.getOrOther("1").get(0).get());
+        Assertions.assertEquals("1", Lira.of("1", "2").getOrOther(Arrays.asList("5", "4")).get(0).get());
 
     }
 
     @Test
     public void get() {
 
-        Assert.assertTrue(Lira.none().get().isEmpty());
-        Assert.assertFalse(Lira.of(1).get().isEmpty());
-        Assert.assertSame(2, Lira.of(1, 2).size());
+        Assertions.assertTrue(Lira.none().get().isEmpty());
+        Assertions.assertFalse(Lira.of(1).get().isEmpty());
+        Assertions.assertSame(2, Lira.of(1, 2).size());
     }
 
 

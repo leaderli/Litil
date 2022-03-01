@@ -2,8 +2,8 @@ package io.leaderli.litil.collection;
 
 import io.leaderli.litil.meta.LiCase;
 import io.leaderli.litil.meta.Lino;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LiCaseTest {
 
@@ -18,7 +18,7 @@ public class LiCaseTest {
                 .case_map(String.class, String::length);
 
         Lino<Integer> of = liCase.lino();
-        Assert.assertEquals(1, of.get().intValue());
+        Assertions.assertEquals(1, of.get().intValue());
 
         a = 100;
         liCase = LiCase.of(Lino.of(a));
@@ -29,7 +29,7 @@ public class LiCaseTest {
 
 
         of = liCase.lino();
-        Assert.assertEquals(100, of.get().intValue());
+        Assertions.assertEquals(100, of.get().intValue());
 
         liCase = LiCase.of(Lino.of("abc"));
 
@@ -38,13 +38,13 @@ public class LiCaseTest {
 
 
         of = liCase.lino();
-        Assert.assertEquals(3, of.get().intValue());
+        Assertions.assertEquals(3, of.get().intValue());
 
         liCase = LiCase.of(Lino.of(123));
 
-        Assert.assertEquals(Lino.none(), liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino());
+        Assertions.assertEquals(Lino.none(), liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino());
         liCase = LiCase.of(Lino.of("123"));
-        Assert.assertEquals(3, liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino().get().intValue());
+        Assertions.assertEquals(3, liCase.filter_map(String.class::isInstance, ln -> ((String) ln).length()).lino().get().intValue());
 
 
     }

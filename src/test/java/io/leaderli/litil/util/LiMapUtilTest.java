@@ -1,16 +1,17 @@
 package io.leaderli.litil.util;
 
 import io.leaderli.litil.collection.LiMapUtil;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.*;
 
-public class LiMapUtilTest extends Assert {
+
+public class LiMapUtilTest {
 
     @Test
     public void test() {
@@ -28,7 +29,6 @@ public class LiMapUtilTest extends Assert {
     }
 
 
-
     @Test
     public void getTypeList() {
         Map<String, Object> map = new HashMap<>();
@@ -37,11 +37,11 @@ public class LiMapUtilTest extends Assert {
         list.add("1");
         map.put("k2", list);
 
-        assertTrue( LiMapUtil.getTypeList(map, "k1", String.class).isEmpty());
+        assertTrue(LiMapUtil.getTypeList(map, "k1", String.class).isEmpty());
         assertEquals(1, LiMapUtil.getTypeList(map, "k2", String.class).size());
-        assertTrue( LiMapUtil.getTypeList(map, "k2", Integer.class).isEmpty());
-        assertTrue( LiMapUtil.getTypeList(map, "k3", Integer.class).isEmpty());
-        assertTrue( LiMapUtil.getTypeList(null, "k3", Integer.class).isEmpty());
+        assertTrue(LiMapUtil.getTypeList(map, "k2", Integer.class).isEmpty());
+        assertTrue(LiMapUtil.getTypeList(map, "k3", Integer.class).isEmpty());
+        assertTrue(LiMapUtil.getTypeList(null, "k3", Integer.class).isEmpty());
     }
 
 
@@ -56,21 +56,22 @@ public class LiMapUtilTest extends Assert {
     }
 
     @Test
-    public void getTypeMap1(){
+    public void getTypeMap1() {
 
         Map<String, Object> map = new HashMap<>();
-        assertTrue( LiMapUtil.getTypeMap(map, "k1").isEmpty());
+        assertTrue(LiMapUtil.getTypeMap(map, "k1").isEmpty());
     }
 
     @Test
-    public void getTypeMap2(){
+    public void getTypeMap2() {
 
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> k1 = new HashMap<>();
         map.put("str_int", k1);
         k1.put("int", 1);
-        assertTrue( LiMapUtil.getTypeMap(map, "str_int").isEmpty());
+        assertTrue(LiMapUtil.getTypeMap(map, "str_int").isEmpty());
     }
+
     @Test
     public void getTypeMap3() {
         Map<String, Object> map = new HashMap<>();

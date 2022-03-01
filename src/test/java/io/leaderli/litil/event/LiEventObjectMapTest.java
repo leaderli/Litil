@@ -1,7 +1,7 @@
 package io.leaderli.litil.event;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LiEventObjectMapTest {
 
@@ -35,32 +35,32 @@ public class LiEventObjectMapTest {
 
         liEventMap.put(TempEventObject.class, listener1);
         liEventMap.put(TempEventObject.class, listener1);
-        Assert.assertEquals(1, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(1, liEventMap.get(TempEventObject.class).size());
 
         liEventMap.put(TempEventObject.class, listener2);
-        Assert.assertEquals(2, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(2, liEventMap.get(TempEventObject.class).size());
 
         liEventMap.remove(listener2);
-        Assert.assertEquals(1, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(1, liEventMap.get(TempEventObject.class).size());
     }
 
     @Test
     public void get() {
         LiEventMap liEventMap = new LiEventMap();
 
-        Assert.assertNotNull(liEventMap.get(TempEventObject.class));
+        Assertions.assertNotNull(liEventMap.get(TempEventObject.class));
 
         Temp listener1 = new Temp();
         Temp listener2 = new Temp();
 
         liEventMap.put(TempEventObject.class, listener1);
         liEventMap.put(TempEventObject.class, listener2);
-        Assert.assertEquals(2, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(2, liEventMap.get(TempEventObject.class).size());
         liEventMap.get(TempEventObject.class).remove(listener1);
-        Assert.assertEquals(2, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(2, liEventMap.get(TempEventObject.class).size());
 
         liEventMap.remove(listener2);
-        Assert.assertEquals(1, liEventMap.get(TempEventObject.class).size());
+        Assertions.assertEquals(1, liEventMap.get(TempEventObject.class).size());
 
 
     }

@@ -1,8 +1,8 @@
 package io.leaderli.litil.collection;
 
 import io.leaderli.litil.type.LiTypeMap;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class LiTypeMapTest {
 
@@ -15,11 +15,11 @@ public class LiTypeMapTest {
         String value = liTypeMap.get(String.class).get();
 
 
-        Assert.assertNull(value);
+        Assertions.assertNull(value);
 
         liTypeMap.put(String.class, "");
         value = liTypeMap.get(String.class).get();
-        Assert.assertNotNull(value);
+        Assertions.assertNotNull(value);
     }
 
     @Test
@@ -27,33 +27,33 @@ public class LiTypeMapTest {
         LiTypeMap liTypeMap = new LiTypeMap();
 
         String value = liTypeMap.computeIfAbsent(String.class, () -> "123").get();
-        Assert.assertEquals("123", value);
+        Assertions.assertEquals("123", value);
     }
 
     @Test
     public void getMono() {
         LiTypeMap liTypeMap = new LiTypeMap();
 
-        Assert.assertTrue(liTypeMap.get(String.class).isEmpty());
+        Assertions.assertTrue(liTypeMap.get(String.class).isEmpty());
         liTypeMap.put(String.class, "");
-        Assert.assertTrue(liTypeMap.get(String.class).isPresent());
+        Assertions.assertTrue(liTypeMap.get(String.class).isPresent());
     }
 
     @Test
     public void remove() {
         LiTypeMap liTypeMap = new LiTypeMap();
 
-        Assert.assertTrue(liTypeMap.get(String.class).isEmpty());
+        Assertions.assertTrue(liTypeMap.get(String.class).isEmpty());
         String v1 = "";
         liTypeMap.put(String.class, v1);
         liTypeMap.put(CharSequence.class, "");
 
-        Assert.assertEquals("", liTypeMap.get(String.class).get());
-        Assert.assertEquals("", liTypeMap.get(CharSequence.class).get());
+        Assertions.assertEquals("", liTypeMap.get(String.class).get());
+        Assertions.assertEquals("", liTypeMap.get(CharSequence.class).get());
 
         liTypeMap.remove(String.class);
 
-        Assert.assertNull(liTypeMap.get(String.class).get());
-        Assert.assertEquals("", liTypeMap.get(CharSequence.class).get());
+        Assertions.assertNull(liTypeMap.get(String.class).get());
+        Assertions.assertEquals("", liTypeMap.get(CharSequence.class).get());
     }
 }

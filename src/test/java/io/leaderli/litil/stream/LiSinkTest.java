@@ -1,10 +1,12 @@
 package io.leaderli.litil.stream;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
-public class LiSinkTest extends Assert {
+public class LiSinkTest {
 
     @Test
     public void test() {

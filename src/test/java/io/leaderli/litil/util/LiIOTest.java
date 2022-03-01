@@ -1,7 +1,7 @@
 package io.leaderli.litil.util;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-public class LiIOTest extends Assert {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class LiIOTest {
 
     @Test
     public void testCreateContentStream() {
