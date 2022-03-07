@@ -1,5 +1,6 @@
 package io.leaderli.litil.util;
 
+import com.sun.corba.se.impl.orbutil.ObjectStreamClassUtil_1_3;
 import io.leaderli.litil.collection.LiListUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,5 +33,14 @@ public class LiListUtilTest {
 
         List<List<Object>> lists2 = LiListUtil.cartesianProduct(Arrays.asList(1, 2), Arrays.asList("-", "*"), Arrays.asList("a", "b"));
         Assertions.assertEquals("[[1, -, a], [1, -, b], [1, *, a], [1, *, b], [2, -, a], [2, -, b], [2, *, a], [2, *, b]]", lists2.toString());
+    }
+
+    @Test
+    void toWrapperArray() {
+        Assertions.assertNull(LiListUtil.toWrapperArray(null));
+        Assertions.assertNull(LiListUtil.toWrapperArray(1));
+        Assertions.assertSame(Integer[].class, LiListUtil.toWrapperArray(new int[]{1}).getClass());
+        Assertions.assertSame(String[].class, LiListUtil.toWrapperArray(new String[]{"1"}).getClass());
+
     }
 }

@@ -201,7 +201,7 @@ public interface Lira<T> extends LiValue {
     }
 
     default T[] toArray(Class<T> type) {
-        return getRaw().toArray(LiClassUtil.array(type, 0));
+        return getRaw().toArray(LiClassUtil.newArray(type, 0));
     }
 
 

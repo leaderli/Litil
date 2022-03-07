@@ -1,7 +1,9 @@
 package io.leaderli.litil.collection;
 
 import io.leaderli.litil.meta.Lira;
+import io.leaderli.litil.type.LiClassUtil;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -61,5 +63,31 @@ public class LiListUtil {
         }
 
         return x;
+    }
+
+
+    /**
+     * @param originalArray the arr object
+     * @return return null if  originalArray is null or not arr ;
+     * if arr is primitive arr , return the wrapper arr.
+     * otherwise cast to arr
+     */
+    public static Object[] toWrapperArray(Object originalArray) {
+
+        if (originalArray == null || !originalArray.getClass().isArray()) {
+            return null;
+        }
+        Class<?> componentType = originalArray.getClass().getComponentType();
+        if (componentType.isPrimitive()) {
+            int length = Array.getLength(originalArray);
+            Object[] array = LiClassUtil.newArray(componentType, length);
+
+            for (int i = 0; i < length; i++) {
+                array[i] = Array.get(originalArray, i);
+            }
+
+            return array;
+        }
+        return (Object[]) originalArray;
     }
 }

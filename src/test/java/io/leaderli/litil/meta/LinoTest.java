@@ -134,7 +134,7 @@ public class LinoTest {
         Object a = 1;
         Assertions.assertSame(1, Lino.of(a).cast(Integer.class).get());
 
-Assertions.assertEquals("[1]",Arrays.toString(Lino.of(new String[]{"1"}).cast(Object[].class).get()));
+        Assertions.assertEquals("[1]", Arrays.toString(Lino.of(new String[]{"1"}).cast(Object[].class).get()));
     }
 
 
@@ -221,4 +221,6 @@ Assertions.assertEquals("[1]",Arrays.toString(Lino.of(new String[]{"1"}).cast(Ob
         Assertions.assertSame(Lino.of(null), Lino.none());
         Assertions.assertSame(1, Lino.of(1).get());
     }
+
+
 }

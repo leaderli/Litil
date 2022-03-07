@@ -38,9 +38,9 @@ public class LiClassUtilTest {
         Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(int[].class, int[].class));
 
 
-        System.out.println(int[].class.isAssignableFrom(Integer[].class));
-        System.out.println(Integer[].class.isAssignableFrom(Integer[].class));
-        System.out.println(Integer[].class.isAssignableFrom(int[].class));
+        Assertions.assertFalse(int[].class.isAssignableFrom(Integer[].class));
+        Assertions.assertTrue(Integer[].class.isAssignableFrom(Integer[].class));
+        Assertions.assertFalse(Integer[].class.isAssignableFrom(int[].class));
     }
 
     @Test
@@ -55,20 +55,21 @@ public class LiClassUtilTest {
     }
 
     @Test
-    public void test() throws Throwable{
+    public void test() throws Throwable {
 
         for (String appJar : LiClassUtil.getAppJars()) {
             System.out.println(appJar);
         }
 
     }
+
     @Test
     public void array() {
 
-        Assertions.assertSame(Integer[].class, LiClassUtil.array(Integer.class, 0).getClass());
-        Assertions.assertSame(Integer[].class, LiClassUtil.array(int.class, 0).getClass());
+        Assertions.assertSame(Integer[].class, LiClassUtil.newArray(Integer.class, 0).getClass());
+        Assertions.assertSame(Integer[].class, LiClassUtil.newArray(int.class, 0).getClass());
 
-        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, LiClassUtil.array(String.class, 0).getClass()));
+        Assertions.assertTrue(LiClassUtil.isAssignableFromOrIsWrapper(CharSequence[].class, LiClassUtil.newArray(String.class, 0).getClass()));
     }
 
     @Test
@@ -80,15 +81,25 @@ public class LiClassUtilTest {
 
 
         a = 1;
-        Assertions.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, Integer.class));
-        Assertions.assertEquals(Integer.valueOf(1), LiClassUtil.cast(a, int.class));
-        System.out.println(LiClassUtil.cast(a,int.class).getClass());
+        Assertions.assertSame(Integer.class, a.getClass());
+        Assertions.assertSame(Integer.class, LiClassUtil.cast(a, Integer.class).getClass());
+        Assertions.assertSame(Integer.class, LiClassUtil.cast(a, int.class).getClass());
+
+        Assertions.assertSame(Integer.class, LiClassUtil.cast(a, Integer.class).getClass());
+        Assertions.assertSame(Integer.class, LiClassUtil.cast(a, int.class).getClass());
 
         a = new int[]{1};
 
-        System.out.println(LiClassUtil.cast(a, int[].class));
+        Assertions.assertSame(int[].class, LiClassUtil.cast(a, int[].class).getClass());
+        Assertions.assertNull(LiClassUtil.cast(a, Integer[].class));
+        Assertions.assertEquals(1, LiClassUtil.cast(a, int[].class)[0]);
 
+        a = new String[]{"1"};
 
+        Assertions.assertNull(LiClassUtil.cast(a, Integer[].class));
+        Assertions.assertSame(String[].class, LiClassUtil.cast(a, String[].class).getClass());
+        Object[] cast = LiClassUtil.cast(a, Object[].class);
+        Assertions.assertEquals("1", cast[0]);
     }
 
 

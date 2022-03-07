@@ -2,13 +2,21 @@ package io.leaderli.litil.params;
 
 import io.leaderli.litil.meta.Lira;
 
-import java.util.List;
+import java.lang.annotation.Annotation;
 
 /**
  * @author leaderli
  * @since 2022/2/24 5:03 PM
  */
-public interface LiArgumentsProvider {
+public abstract class LiArgumentsProvider<A extends Annotation, T> {
 
-    Lira provideArguments();
+    public final Lira<T> arguments;
+
+    protected LiArgumentsProvider(A source, Class<T> componentType) {
+        this.arguments = provideArguments(source, componentType);
+    }
+
+
+    protected abstract Lira<T> provideArguments(A source, Class<T> componentType);
+
 }

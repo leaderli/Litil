@@ -18,6 +18,7 @@ public class LiClassUtil {
      * Maps names of primitives to their corresponding primitive {@code Class}es.
      */
     private static final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_MAP = new HashMap<>();
+    private static final Map<Class<?>, Class<?>> WRAPPER_PRIMITIVE_MAP = new HashMap<>();
 
     static {
         PRIMITIVE_WRAPPER_MAP.put(Boolean.TYPE, Boolean.class);
@@ -29,6 +30,10 @@ public class LiClassUtil {
         PRIMITIVE_WRAPPER_MAP.put(Double.TYPE, Double.class);
         PRIMITIVE_WRAPPER_MAP.put(Float.TYPE, Float.class);
         PRIMITIVE_WRAPPER_MAP.put(Void.TYPE, Void.class);
+
+        PRIMITIVE_WRAPPER_MAP.forEach((k, v) -> {
+            WRAPPER_PRIMITIVE_MAP.put(v, k);
+        });
     }
 
     /**
@@ -43,11 +48,12 @@ public class LiClassUtil {
             if (cls.isPrimitive()) {
                 convertedClass = PRIMITIVE_WRAPPER_MAP.get(cls);
             } else if (cls.isArray()) {
-                convertedClass = LiClassUtil.array(primitiveToWrapper(cls.getComponentType()), 0).getClass();
+                convertedClass = LiClassUtil.newArray(primitiveToWrapper(cls.getComponentType()), 0).getClass();
             }
         }
         return convertedClass;
     }
+
 
     /**
      * @param father the superclass
@@ -62,7 +68,14 @@ public class LiClassUtil {
             if (father.isArray()) {
 
                 if (son.isArray()) {
-                    return isAssignableFromOrIsWrapper(father.getComponentType(), son.getComponentType());
+
+                    //对于数组，基础类型的数组无法进行强转
+                    father = father.getComponentType();
+                    son = son.getComponentType();
+                    if (father.isPrimitive() || son.isPrimitive()) {
+                        return father == son;
+                    }
+                    return father.isAssignableFrom(son);
                 }
             } else {
 
@@ -106,7 +119,7 @@ public class LiClassUtil {
      * @return the new array
      */
     @SuppressWarnings("unchecked")
-    public static <T> T[] array(Class<? extends T> componentType, int length) {
+    public static <T> T[] newArray(Class<? extends T> componentType, int length) {
         return (T[]) Array.newInstance(primitiveToWrapper(componentType), length);
     }
 
@@ -119,13 +132,16 @@ public class LiClassUtil {
      */
     @SuppressWarnings("unchecked")
     public static <T> T cast(Object obj, Class<T> castType) {
-        castType = (Class<T>) primitiveToWrapper(castType);
+//        castType = (Class<T>) primitiveToWrapper(castType);
         if (obj == null || castType == null) {
             return null;
         }
+
         if (isAssignableFromOrIsWrapper(castType, obj.getClass())) {
+
             return (T) obj;
         }
+
         return null;
     }
 

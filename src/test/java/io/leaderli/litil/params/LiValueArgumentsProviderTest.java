@@ -1,5 +1,6 @@
 package io.leaderli.litil.params;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -18,9 +19,11 @@ class LiValueArgumentsProviderTest {
         LiValueSource valueSources = this.getClass().getDeclaredField("ages").getAnnotation(LiValueSource.class);
 
 
-        LiValueArgumentsProvider provider = new LiValueArgumentsProvider();
-        provider.accept(valueSources);
-        System.out.println(provider.provideArguments().toString());
+        LiValueArgumentsProvider<Integer> provider = new LiValueArgumentsProvider<>(valueSources, int.class);
+
+        System.out.println(provider.arguments);
+
+        Assertions.assertEquals(provider.arguments.getRaw().toString(), "[1, 2]");
 
     }
 }
