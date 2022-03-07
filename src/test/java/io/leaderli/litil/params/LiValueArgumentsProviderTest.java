@@ -19,7 +19,7 @@ class LiValueArgumentsProviderTest {
         LiValueSource valueSources = this.getClass().getDeclaredField("ages").getAnnotation(LiValueSource.class);
 
 
-        LiValueArgumentsProvider<Integer> provider = new LiValueArgumentsProvider<>(valueSources, int.class);
+        LiArgumentsProvider<?, ?> provider = new LiValueArgumentsProvider<>(valueSources, int.class);
 
         System.out.println(provider.arguments);
 

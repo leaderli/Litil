@@ -13,6 +13,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface LiArgumentsSource {
 
+    @SuppressWarnings("rawtypes")
     Class<? extends LiArgumentsProvider> value();
 
 }

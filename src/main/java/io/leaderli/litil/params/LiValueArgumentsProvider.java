@@ -12,7 +12,7 @@ import java.lang.reflect.Array;
  */
 public class LiValueArgumentsProvider<T> extends LiArgumentsProvider<LiValueSource, T> {
 
-    protected LiValueArgumentsProvider(LiValueSource source, Class<T> componentType) {
+    public LiValueArgumentsProvider(LiValueSource source, Class<T> componentType) {
         super(source, componentType);
     }
 
