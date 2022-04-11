@@ -31,13 +31,6 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
-      run: |
-        echo '--------->'${{ env.GITHUB_ACTOR }}
-        echo '--------->'${{ env.GITHUB_TOKEN }}
-        cat $GITHUB_WORKSPACE/settings.xml
-
-        
-        mvn deploy -s $GITHUB_WORKSPACE/settings.xml 
+      run:  mvn deploy -s $GITHUB_WORKSPACE/settings.xml 
       env:
-        GITHUB_ACTOR: leaderli
         GITHUB_TOKEN: ${{ github.token }}
