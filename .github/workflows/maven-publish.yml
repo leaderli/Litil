@@ -32,12 +32,9 @@ jobs:
 
     - name: Publish to GitHub Packages Apache Maven
       run: |
-        echo '123123123123'
-        echo ${{ secrets.GITHUB_TOKEN }}
-        echo '--------->'${{ github }}
-        echo '--------->'${{ github.username }}
+        echo '--------->'${{ env.GITHUB_ACTOR }}
+        echo '--------->'${{ env.GITHUB_TOKEN }}
         cat $GITHUB_WORKSPACE/settings.xml
-        echo '123123123123'
 
         
         mvn deploy -s $GITHUB_WORKSPACE/settings.xml 
