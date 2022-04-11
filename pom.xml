@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.leaderli</groupId>
-    <artifactId>Litil</artifactId>
+    <artifactId>litil</artifactId>
     <version>1.0.4</version>
     <name>Litil</name>
     <properties>
@@ -67,29 +67,29 @@
 
         <plugins>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.0</version>
-                <!-- 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal -->
-                <executions>
-                    <execution>
-                        <!-- 绑定source插件到Maven的生命周期 -->
-                        <phase>compile</phase>
-                        <!--在生命周期后执行绑定的source插件的goals -->
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-source-plugin</artifactId>-->
+<!--                <version>3.0.0</version>-->
+<!--                &lt;!&ndash; 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal &ndash;&gt;-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        &lt;!&ndash; 绑定source插件到Maven的生命周期 &ndash;&gt;-->
+<!--                        <phase>compile</phase>-->
+<!--                        &lt;!&ndash;在生命周期后执行绑定的source插件的goals &ndash;&gt;-->
+<!--                        <goals>-->
+<!--                            <goal>jar-no-fork</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
     <distributionManagement>
         <repository>
             <id>github</id>
             <name>GitHub OWNER Apache Maven Packages</name>
-            <url>https://maven.pkg.github.com/leaderliTeam/maven_repository</url>
+            <url>https://maven.pkg.github.com/leaderli/maven_repository</url>
         </repository>
     </distributionManagement>
 
