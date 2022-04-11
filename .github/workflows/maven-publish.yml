@@ -36,9 +36,10 @@ jobs:
         echo ${{ secrets.GITHUB_TOKEN }}
         echo '--------->'${{ github }}
         echo '--------->'${{ github.username }}
+        cat $GITHUB_WORKSPACE/settings.xml
         echo '123123123123'
 
         
-        mvn deploy -s $GITHUB_WORKSPACE/settings.xml -X
+        mvn deploy -s $GITHUB_WORKSPACE/settings.xml 
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
