@@ -4,7 +4,7 @@
     <groupId>io.leaderli</groupId>
     <artifactId>litil</artifactId>
     <version>1.0.4</version>
-    <name>Litil</name>
+    <name>litil</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.compile.version>1.8</project.compile.version>
@@ -67,22 +67,22 @@
 
         <plugins>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-source-plugin</artifactId>-->
-<!--                <version>3.0.0</version>-->
-<!--                &lt;!&ndash; 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal &ndash;&gt;-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        &lt;!&ndash; 绑定source插件到Maven的生命周期 &ndash;&gt;-->
-<!--                        <phase>compile</phase>-->
-<!--                        &lt;!&ndash;在生命周期后执行绑定的source插件的goals &ndash;&gt;-->
-<!--                        <goals>-->
-<!--                            <goal>jar-no-fork</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-source-plugin</artifactId>-->
+            <!--                <version>3.0.0</version>-->
+            <!--                &lt;!&ndash; 绑定source插件到Maven的生命周期,并在生命周期后执行绑定的source的goal &ndash;&gt;-->
+            <!--                <executions>-->
+            <!--                    <execution>-->
+            <!--                        &lt;!&ndash; 绑定source插件到Maven的生命周期 &ndash;&gt;-->
+            <!--                        <phase>compile</phase>-->
+            <!--                        &lt;!&ndash;在生命周期后执行绑定的source插件的goals &ndash;&gt;-->
+            <!--                        <goals>-->
+            <!--                            <goal>jar-no-fork</goal>-->
+            <!--                        </goals>-->
+            <!--                    </execution>-->
+            <!--                </executions>-->
+            <!--            </plugin>-->
         </plugins>
     </build>
     <distributionManagement>
