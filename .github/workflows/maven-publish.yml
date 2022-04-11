@@ -34,7 +34,8 @@ jobs:
       run: |
         echo '123123123123'
         echo ${{ secrets.GITHUB_TOKEN }}
-        echo '--------->'${{ github.token }}
+        echo '--------->'${{ github }}
+        echo '--------->'${{ github.username }}
         echo '123123123123'
 
         
