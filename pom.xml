@@ -85,5 +85,12 @@
             </plugin>
         </plugins>
     </build>
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub OWNER Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/leaderliTeam/maven_repository</url>
+        </repository>
+    </distributionManagement>
 
 </project>
