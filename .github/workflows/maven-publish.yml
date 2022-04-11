@@ -39,5 +39,5 @@ jobs:
         
         mvn deploy -s $GITHUB_WORKSPACE/settings.xml 
       env:
-        GITHUB_ACTOR: 429243408@qq.com
+        GITHUB_ACTOR: leaderli
         GITHUB_TOKEN: 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
