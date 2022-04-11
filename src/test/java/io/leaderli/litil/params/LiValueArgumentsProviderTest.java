@@ -14,16 +14,16 @@ class LiValueArgumentsProviderTest {
     private int ages;
 
     @Test
-    public void test() throws Throwable {
+    void test() throws Throwable {
 
         LiValueSource valueSources = this.getClass().getDeclaredField("ages").getAnnotation(LiValueSource.class);
 
 
-        LiArgumentsProvider<?, ?> provider = new LiValueArgumentsProvider<>(valueSources, int.class);
+        LiArgumentsProvider<LiValueSource, ?> provider = new LiValueArgumentsProvider<>(valueSources, int.class);
 
         System.out.println(provider.arguments);
-
-        Assertions.assertEquals(provider.arguments.getRaw().toString(), "[1, 2]");
+        System.out.println(provider.arguments);
+        Assertions.assertEquals("[1, 2]", provider.arguments.getRaw().toString());
 
     }
 }
