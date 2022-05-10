@@ -3,10 +3,7 @@ package io.leaderli.litil.collection;
 import io.leaderli.litil.meta.Lino;
 import io.leaderli.litil.type.LiClassUtil;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LiMapUtil {
 
@@ -95,5 +92,33 @@ public class LiMapUtil {
     public static Lino<String> getTypeObject(Map<String, String> map, String key) {
         return getTypeObject(map, key, String.class);
     }
+
+
+    public static Lino<?> deepGet(Object origin, String... keys) {
+
+
+        if (keys == null || keys.length == 0) {
+            return Lino.none();
+        }
+
+        String key = keys[0];
+        Lino<Object> value = Lino.of(origin)
+                .cast(Map.class)
+                .map(m -> m.get(key));
+        keys = Arrays.copyOfRange(keys, 1, keys.length);
+
+        if (keys.length == 0) {
+            return value;
+        }
+        return deepGet(value.get(), keys);
+
+    }
+
+    public static void main(String[] args) {
+        String[] keys = new String[]{"1"};
+        String[] strings = Arrays.copyOfRange(keys, 1, 1);
+        System.out.println(Arrays.toString(strings));
+    }
+
 
 }

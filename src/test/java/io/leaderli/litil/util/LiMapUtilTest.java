@@ -1,6 +1,7 @@
 package io.leaderli.litil.util;
 
 import io.leaderli.litil.collection.LiMapUtil;
+import io.leaderli.litil.meta.Lino;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class LiMapUtilTest {
         map.put("k2", list);
 
         assertTrue(LiMapUtil.getTypeList(map, "k1", String.class).isEmpty());
+        assertEquals(1, LiMapUtil.getTypeList(map, "k2", String.class).size());
         assertEquals(1, LiMapUtil.getTypeList(map, "k2", String.class).size());
         assertTrue(LiMapUtil.getTypeList(map, "k2", Integer.class).isEmpty());
         assertTrue(LiMapUtil.getTypeList(map, "k3", Integer.class).isEmpty());
@@ -79,5 +81,32 @@ public class LiMapUtilTest {
         map.put("str_str", k2);
         k2.put("a", "a");
         assertEquals("a", LiMapUtil.getTypeMap(map, "str_str").get("a"));
+        assertEquals("a", LiMapUtil.getTypeMap(map, "str_str", String.class).get("a"));
+    }
+
+
+    @Test
+    public void deepGet() {
+
+        String[] keys = null;
+        assertSame(Lino.none(), LiMapUtil.deepGet(null, keys));
+        assertSame(Lino.none(), LiMapUtil.deepGet(1, keys));
+
+        Map<String, String> map = new HashMap<>();
+        assertSame(Lino.none(), LiMapUtil.deepGet(map, keys));
+        assertSame(Lino.none(), LiMapUtil.deepGet(map, "a"));
+
+        map.put("a", "1");
+
+        assertEquals(Lino.of("1"), LiMapUtil.deepGet(map, "a"));
+        assertNotEquals(Lino.of("1"), LiMapUtil.deepGet(map, "b"));
+
+        Map<String, Object> big = new HashMap<>();
+        big.put("map", map);
+        assertEquals(Lino.of("1"), LiMapUtil.deepGet(big, "map", "a"));
+        assertEquals(Lino.none(), LiMapUtil.deepGet(big, "map2", "a"));
+
+        assertTrue(LiMapUtil.deepGet(big, "map").get() instanceof Map);
+
     }
 }
