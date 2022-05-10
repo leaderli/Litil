@@ -22,7 +22,6 @@ jobs:
     steps:
     - uses: actions/delete-package-versions@v3
       with:
-        package-name: 'litil'
         ignore-versions: '^\\d+\\.\\d+\\.0$'
     - uses: actions/checkout@v3
     - name: Set up JDK 8
