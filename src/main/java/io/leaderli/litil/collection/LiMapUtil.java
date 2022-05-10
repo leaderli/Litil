@@ -102,9 +102,11 @@ public class LiMapUtil {
         }
 
         String key = keys[0];
+
         Lino<Object> value = Lino.of(origin)
                 .cast(Map.class)
                 .map(m -> m.get(key));
+
         keys = Arrays.copyOfRange(keys, 1, keys.length);
 
         if (keys.length == 0) {
@@ -112,12 +114,6 @@ public class LiMapUtil {
         }
         return deepGet(value.get(), keys);
 
-    }
-
-    public static void main(String[] args) {
-        String[] keys = new String[]{"1"};
-        String[] strings = Arrays.copyOfRange(keys, 1, 1);
-        System.out.println(Arrays.toString(strings));
     }
 
 
