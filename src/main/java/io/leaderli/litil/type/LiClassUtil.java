@@ -31,9 +31,7 @@ public class LiClassUtil {
         PRIMITIVE_WRAPPER_MAP.put(Float.TYPE, Float.class);
         PRIMITIVE_WRAPPER_MAP.put(Void.TYPE, Void.class);
 
-        PRIMITIVE_WRAPPER_MAP.forEach((k, v) -> {
-            WRAPPER_PRIMITIVE_MAP.put(v, k);
-        });
+        PRIMITIVE_WRAPPER_MAP.forEach((k, v) -> WRAPPER_PRIMITIVE_MAP.put(v, k));
     }
 
     /**
@@ -107,8 +105,7 @@ public class LiClassUtil {
             e.printStackTrace();
         }
 
-        return Collections.emptyList();
-
+        return new ArrayList<>();
     }
 
     /**
@@ -154,7 +151,7 @@ public class LiClassUtil {
     public static <T> List<T> filterCanCast(List<?> list, Class<T> castType) {
 
         if (list == null || castType == null) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
         return list.stream()
                 .map(item -> cast(item, castType))

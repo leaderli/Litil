@@ -41,7 +41,7 @@ public class LiMapUtil {
     public static <T> List<T> getTypeList(Map<String, ?> map, String key, Class<T> listItemType) {
 
         if (map == null) {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
         Object value = map.get(key);
 
@@ -50,7 +50,7 @@ public class LiMapUtil {
             //noinspection
             return LiClassUtil.filterCanCast((List<?>) value, listItemType);
         }
-        return Collections.emptyList();
+        return new ArrayList<>();
     }
 
     public static List<String> getTypeList(Map<String, ?> map, String key) {

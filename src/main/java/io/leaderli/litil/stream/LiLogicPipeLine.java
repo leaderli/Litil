@@ -23,14 +23,14 @@ public class LiLogicPipeLine<T> implements LinterLogicPipeLineSink<T> {
         }
     }
 
-     private  LiSink<T, Boolean> liSink ;
+    private LiSink<T, Boolean> liSink;
 
     private LiLogicPipeLine() {
 
     }
 
 
-    public static <T> LinterBeginSink <T> instance() {
+    public static <T> LinterBeginSink<T> instance() {
 
         return new LiLogicPipeLine<>();
     }

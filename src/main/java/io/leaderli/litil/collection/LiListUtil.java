@@ -17,7 +17,7 @@ public class LiListUtil {
     public static <T> List<T> getDuplicateElement(List<T> list) {
 
         if (list == null || list.isEmpty()) {
-            return Collections.emptyList();
+            return  new ArrayList<>();
         }
 
         List<T> duplicate = new ArrayList<>();

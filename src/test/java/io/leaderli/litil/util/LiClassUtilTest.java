@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class LiClassUtilTest {
     @Test
@@ -112,6 +113,9 @@ public class LiClassUtilTest {
         Assertions.assertSame(2, LiClassUtil.filterCanCast(list, Integer.class).size());
         Assertions.assertSame(2, LiClassUtil.filterCanCast(list, int.class).size());
         Assertions.assertSame(3, LiClassUtil.filterCanCast(list, Object.class).size());
+
+        List<Boolean> empty = LiClassUtil.filterCanCast(list, null);
+        empty.add(true);
 
     }
 
